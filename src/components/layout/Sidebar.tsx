@@ -1,6 +1,7 @@
 import React from "react";
 import type { SectionId } from "../../types";
 import { useAppContext } from "../../context/AppContext";
+import { HealthBadge } from "../ai/HealthBadge";
 
 interface NavItem {
   id: SectionId;
@@ -40,8 +41,9 @@ export const Sidebar: React.FC = () => {
           </button>
         ))}
       </nav>
-      <div className="px-4 py-3 text-[11px] text-slate-500 border-t">
-        v2 · From paddocks to protocols
+      <div className="px-4 py-3 text-[11px] text-slate-500 border-t flex items-center justify-between">
+        <span>v2 · From paddocks to protocols</span>
+        <HealthBadge />
       </div>
     </aside>
   );

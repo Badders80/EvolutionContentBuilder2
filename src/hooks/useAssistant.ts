@@ -36,8 +36,6 @@ export function useAssistant() {
         content: rawInput,
       });
 
-      const model = genAI.getGenerativeModel({ model: "gemini-3.0-pro" });
-
       const prompt = `
 ${SYSTEM_PROMPT}
 
@@ -45,8 +43,30 @@ ${SYSTEM_PROMPT}
 ${rawInput}
 `;
 
-      const response = await model.generateContent(prompt);
+      // Fallback strategy: 3.0 Pro -> 3.0 -> 2.0 Pro -> 1.5 Pro
+      const modelsToTry = ["gemini-3.0-pro", "gemini-3.0", "gemini-2.0-pro", "gemini-1.5-pro"];
+      let response;
+      let lastError;
+
+      for (const modelName of modelsToTry) {
+        try {
+          console.log(`Attempting generation with model: ${modelName}`);
+          const model = genAI.getGenerativeModel({ model: modelName });
+          response = await model.generateContent(prompt);
+          if (response) break; // Success
+        } catch (e) {
+          console.warn(`Model ${modelName} failed:`, e);
+          lastError = e;
+          continue; // Try next model
+        }
+      }
+
+      if (!response) {
+        throw lastError || new Error("All models failed to generate content");
+      }
+
       const textRaw = response?.response?.text?.() ?? "";
+      console.log("Gemini Raw Response:", textRaw); // Debug log
       const text = textRaw.replace(/```(json)?/gi, "").replace(/```/g, "").trim();
 
       let parsed: {
@@ -60,7 +80,9 @@ ${rawInput}
 
       try {
         parsed = JSON.parse(text);
-      } catch {
+        console.log("Parsed JSON:", parsed); // Debug log
+      } catch (e) {
+        console.warn("JSON Parse Failed, falling back to raw text", e);
         parsed = {
           headline: "",
           subheadline: "",
