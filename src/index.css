@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+:root {
+  --sidebar-width: 240px;
+  --editor-min-width: 320px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Magazine Template Styles */
+.magazine-template {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: linear-gradient(135deg, #fefefe 0%, #f8f8f8 100%);
+}
+
+.magazine-headline {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.magazine-subheadline {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.magazine-body {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.magazine-quote {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  border-left: 4px solid #c9a227;
+  padding-left: 1.5rem;
+}
+
+/* Two-column layout for editorial */
+.two-column {
+  columns: 2;
+  column-gap: 2rem;
+}
+
+@media (max-width: 600px) {
+  .two-column {
+    columns: 1;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
