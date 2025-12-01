@@ -1,8 +1,9 @@
-import { useApp } from '../../context/AppContext';
 import { SmartImage } from '../SmartImage';
+import { useAppStore } from '../../store/useAppStore';
 
 export function EditorialTemplate() {
-  const { content, settings } = useApp();
+  const content = useAppStore((s) => s.content);
+  const settings = useAppStore((s) => s.settings);
 
   // Split body into paragraphs
   const paragraphs = content.body.split('\n\n').filter(p => p.trim());
@@ -11,9 +12,11 @@ export function EditorialTemplate() {
     <article className="magazine-template min-h-full p-6 md:p-8">
       {/* Header */}
       <header className="mb-8 border-b-2 border-slate-900 pb-6">
-        <p className="magazine-subheadline text-amber-600 text-xs mb-3">
-          {content.subheadline || 'SUBHEADLINE'}
-        </p>
+        {content.subheadline && (
+          <p className="font-serif text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+            {content.subheadline}
+          </p>
+        )}
         <h1 className="magazine-headline text-2xl md:text-3xl lg:text-4xl text-slate-900 mb-4">
           {content.headline || 'Your Headline Here'}
         </h1>

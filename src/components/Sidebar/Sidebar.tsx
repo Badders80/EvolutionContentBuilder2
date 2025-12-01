@@ -10,10 +10,10 @@ import {
   Image,
   X,
 } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
 import { GeminiPanel } from '../GeminiPanel';
 import type { ContentMode, LayoutType, DevicePreview } from '../../types';
 import type { GeminiContentResult } from '../../hooks/useGemini';
+import { useAppStore } from '../../store/useAppStore';
 
 interface SidebarProps {
   onGenerate: () => void;
@@ -45,7 +45,11 @@ const devices: { value: DevicePreview; icon: typeof Monitor; label: string }[] =
 ];
 
 export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTMLSlim, onGeminiFill }: SidebarProps) {
-  const { settings, updateSettings, sidebarOpen, setSidebarOpen, isGenerated } = useApp();
+  const settings = useAppStore((s) => s.settings);
+  const updateSettings = useAppStore((s) => s.updateSettings);
+  const sidebarOpen = useAppStore((s) => s.sidebarOpen);
+  const setSidebarOpen = useAppStore((s) => s.setSidebarOpen);
+  const isGenerated = useAppStore((s) => s.isGenerated);
 
   return (
     <>
@@ -71,7 +75,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
         {/* Header */}
         <div className="p-4 border-b border-slate-700 flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-bold text-amber-400">Evolution</h1>
+            <h1 className="text-lg font-bold text-white tracking-wide">EVOLUTION</h1>
             <p className="text-xs text-slate-400">Content Builder</p>
           </div>
           <button
@@ -92,7 +96,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
             <select
               value={settings.mode}
               onChange={(e) => updateSettings({ mode: e.target.value as ContentMode })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-white"
             >
               {modes.map((mode) => (
                 <option key={mode.value} value={mode.value}>
@@ -116,7 +120,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
                   onChange={(e) => updateSettings({ includeQuote: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-10 h-5 bg-slate-700 rounded-full peer-checked:bg-amber-500 transition-colors" />
+                <div className="w-10 h-5 bg-slate-700 rounded-full peer-checked:bg-white transition-colors" />
                 <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
               </div>
               <Quote size={16} className="text-slate-400 group-hover:text-white" />
@@ -131,7 +135,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
                   onChange={(e) => updateSettings({ includeImage: e.target.checked })}
                   className="sr-only peer"
                 />
-                <div className="w-10 h-5 bg-slate-700 rounded-full peer-checked:bg-amber-500 transition-colors" />
+                <div className="w-10 h-5 bg-slate-700 rounded-full peer-checked:bg-white transition-colors" />
                 <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5" />
               </div>
               <Image size={16} className="text-slate-400 group-hover:text-white" />
@@ -152,7 +156,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
                   className={`
                     px-3 py-2 text-xs font-medium rounded-lg transition-all
                     ${settings.layoutType === layout.value
-                      ? 'bg-amber-500 text-slate-900'
+                      ? 'bg-white text-slate-900'
                       : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                     }
                   `}
@@ -177,7 +181,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
                   className={`
                     flex-1 p-2 rounded-lg transition-all flex items-center justify-center
                     ${settings.devicePreview === device.value
-                      ? 'bg-amber-500 text-slate-900'
+                      ? 'bg-white text-slate-900'
                       : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
                     }
                   `}
@@ -196,7 +200,7 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
         <div className="p-4 border-t border-slate-700 space-y-2">
           <button
             onClick={onGenerate}
-            className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold py-2.5 px-4 rounded-lg transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-200 text-slate-900 font-semibold py-2.5 px-4 rounded-md transition-colors"
           >
             <Sparkles size={18} />
             Generate Output

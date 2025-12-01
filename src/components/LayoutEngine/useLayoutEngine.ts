@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useApp } from '../../context/AppContext';
 import { determineTemplate, countWords } from './layoutRules';
+import { useAppStore } from '../../store/useAppStore';
 
 export interface LayoutEngineResult {
   wordCount: number;
@@ -12,7 +12,11 @@ export interface LayoutEngineResult {
  * Updates the active template based on content and settings
  */
 export function useLayoutEngine(): LayoutEngineResult {
-  const { content, settings, isGenerated, setActiveTemplate, activeTemplate } = useApp();
+  const content = useAppStore((s) => s.content);
+  const settings = useAppStore((s) => s.settings);
+  const isGenerated = useAppStore((s) => s.isGenerated);
+  const setActiveTemplate = useAppStore((s) => s.setActiveTemplate);
+  const activeTemplate = useAppStore((s) => s.activeTemplate);
 
   // Monitor body content and update template when generated
   useEffect(() => {

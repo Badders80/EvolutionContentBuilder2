@@ -14,6 +14,7 @@ export interface ContentData {
   quoteAttribution: string;
   imageFile: File | null;
   imagePreview: string | null;
+  imageCaption: string;
 }
 
 export interface AppSettings {
@@ -39,6 +40,7 @@ export const initialContent: ContentData = {
   quoteAttribution: '',
   imageFile: null,
   imagePreview: null,
+  imageCaption: '',
 };
 
 export const initialSettings: AppSettings = {

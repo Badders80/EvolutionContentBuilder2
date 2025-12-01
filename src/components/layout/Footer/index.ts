@@ -1,0 +1,1 @@
+export { EditorialFooter } from './EditorialFooter';

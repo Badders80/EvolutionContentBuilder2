@@ -8,7 +8,7 @@ interface SmartImageProps {
 
 /**
  * Smart image component that detects portrait vs landscape orientation
- * and applies appropriate styling for premium magazine aesthetics
+ * and applies appropriate styling for premium greyscale magazine aesthetics
  */
 export function SmartImage({ src, alt = '', className = '' }: SmartImageProps) {
   const [isPortrait, setIsPortrait] = useState(false);
@@ -31,8 +31,8 @@ export function SmartImage({ src, alt = '', className = '' }: SmartImageProps) {
 
   if (!src) {
     return (
-      <div className={`bg-gradient-to-br from-slate-200 to-slate-300 rounded-sm flex items-center justify-center h-64 ${className}`}>
-        <span className="text-slate-500 text-sm">Featured Image</span>
+      <div className={`bg-es-bgSoft border border-es-border flex items-center justify-center h-48 ${className}`}>
+        <span className="text-es-muted text-sm font-serif italic">Featured Image</span>
       </div>
     );
   }
@@ -41,14 +41,14 @@ export function SmartImage({ src, alt = '', className = '' }: SmartImageProps) {
   const getImageClass = () => {
     if (isSmall) {
       // Small images: don't stretch, center them
-      return 'max-h-[350px] w-auto object-contain mx-auto rounded-sm shadow-md';
+      return 'max-h-[300px] w-auto object-contain mx-auto';
     }
     if (isPortrait) {
       // Portrait: constrain height, auto width, center
-      return 'max-h-[450px] w-auto object-cover mx-auto rounded-sm shadow-md';
+      return 'max-h-[400px] w-auto object-cover mx-auto';
     }
     // Landscape: full width, constrain height
-    return 'w-full object-cover max-h-[450px] rounded-sm shadow-md';
+    return 'w-full object-cover max-h-[350px]';
   };
 
   return (

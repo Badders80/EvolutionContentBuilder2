@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-es-bg: #ffffff;
+  --color-es-bgSoft: #f7f7f7;
+  --color-es-text: #1a1a1a;
+  --color-es-textSoft: #4a4a4a;
+  --color-es-border: #d4d4d4;
+  --color-es-borderStrong: #9a9a9a;
+  --color-es-muted: #e4e4e4;
+
+  --font-sans: "Inter", system-ui, ui-sans-serif, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+}
+
 :root {
   --sidebar-width: 240px;
   --editor-min-width: 320px;
@@ -11,54 +24,45 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply font-sans bg-es-bgSoft text-es-text;
 }
 
-/* Magazine Template Styles */
-.magazine-template {
-  font-family: 'Georgia', 'Times New Roman', serif;
-  background: linear-gradient(135deg, #fefefe 0%, #f8f8f8 100%);
+/* Editorial Magazine Styles - Greyscale Premium */
+.editorial-template {
+  @apply font-serif bg-es-bg text-es-text;
 }
 
-.magazine-headline {
-  font-family: 'Playfair Display', 'Georgia', serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+.editorial-headline {
+  @apply font-serif font-semibold leading-tight text-3xl md:text-4xl text-es-text;
 }
 
-.magazine-subheadline {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
+.editorial-subheadline {
+  @apply font-serif italic text-es-textSoft text-lg;
 }
 
-.magazine-body {
-  font-family: 'Georgia', 'Times New Roman', serif;
-  line-height: 1.7;
-  font-size: 1.05rem;
+.editorial-body {
+  @apply font-sans text-[1rem] leading-relaxed text-es-text;
 }
 
-.magazine-quote {
-  font-family: 'Georgia', 'Times New Roman', serif;
-  font-style: italic;
-  border-left: 4px solid #c9a227;
-  padding-left: 1.5rem;
+.editorial-quote {
+  @apply font-serif italic text-es-textSoft;
 }
 
-/* Two-column layout for editorial */
-.two-column {
-  columns: 2;
-  column-gap: 2rem;
+.editorial-caption {
+  @apply text-xs italic text-es-textSoft mt-1;
 }
 
-@media (max-width: 600px) {
-  .two-column {
-    columns: 1;
-  }
+/* Drop cap for first paragraph */
+.drop-cap::first-letter {
+  float: left;
+  font-size: 3.5rem;
+  line-height: 1;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  margin-top: 0.1rem;
+  color: #111111;
 }
 
 /* Print styles */

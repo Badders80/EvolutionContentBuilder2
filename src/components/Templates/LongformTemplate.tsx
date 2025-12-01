@@ -1,8 +1,9 @@
-import { useApp } from '../../context/AppContext';
 import { SmartImage } from '../SmartImage';
+import { useAppStore } from '../../store/useAppStore';
 
 export function LongformTemplate() {
-  const { content, settings } = useApp();
+  const content = useAppStore((s) => s.content);
+  const settings = useAppStore((s) => s.settings);
 
   // Split body into paragraphs
   const paragraphs = content.body.split('\n\n').filter(p => p.trim());
@@ -22,9 +23,11 @@ export function LongformTemplate() {
             
             {/* Overlay Content */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-              <p className="magazine-subheadline text-amber-400 text-xs mb-3">
-                {content.subheadline || 'SUBHEADLINE'}
-              </p>
+              {content.subheadline && (
+                <p className="font-serif text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                  {content.subheadline}
+                </p>
+              )}
               <h1 className="magazine-headline text-2xl md:text-4xl lg:text-5xl text-white mb-2">
                 {content.headline || 'Your Headline Here'}
               </h1>
@@ -32,9 +35,11 @@ export function LongformTemplate() {
           </div>
         ) : (
           <div className="p-6 md:p-8 bg-slate-900 text-white">
-            <p className="magazine-subheadline text-amber-400 text-xs mb-3">
-              {content.subheadline || 'SUBHEADLINE'}
-            </p>
+            {content.subheadline && (
+              <p className="font-serif text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                {content.subheadline}
+              </p>
+            )}
             <h1 className="magazine-headline text-2xl md:text-4xl lg:text-5xl text-white">
               {content.headline || 'Your Headline Here'}
             </h1>
