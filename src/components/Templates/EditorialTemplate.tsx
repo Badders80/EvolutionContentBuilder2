@@ -1,76 +1,77 @@
 import { useApp } from '../../context/AppContext';
+import { SmartImage } from '../SmartImage';
 
 export function EditorialTemplate() {
   const { content, settings } = useApp();
 
-  // Split body into paragraphs for two-column layout
+  // Split body into paragraphs
   const paragraphs = content.body.split('\n\n').filter(p => p.trim());
 
   return (
-    <article className="magazine-template min-h-full p-8">
+    <article className="magazine-template min-h-full p-6 md:p-8">
       {/* Header */}
       <header className="mb-8 border-b-2 border-slate-900 pb-6">
         <p className="magazine-subheadline text-amber-600 text-xs mb-3">
           {content.subheadline || 'SUBHEADLINE'}
         </p>
-        
-        <h1 className="magazine-headline text-3xl md:text-4xl text-slate-900 mb-4">
+        <h1 className="magazine-headline text-2xl md:text-3xl lg:text-4xl text-slate-900 mb-4">
           {content.headline || 'Your Headline Here'}
         </h1>
       </header>
 
-      {/* Image Section */}
-      {settings.includeImage && (
-        <figure className="mb-8">
-          {content.imagePreview ? (
-            <img
-              src={content.imagePreview}
-              alt="Featured"
-              className="w-full h-56 object-cover rounded-lg shadow-md"
-            />
-          ) : (
-            <div className="h-56 bg-gradient-to-br from-slate-200 to-slate-300 rounded-lg flex items-center justify-center">
-              <span className="text-slate-500 text-sm">Featured Image</span>
+      {/* Responsive Grid: Mobile = 1 col, Tablet/Desktop = 2 col */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {/* Left Column: Body Content */}
+        <div className="magazine-body text-slate-700">
+          {paragraphs.length > 0 ? (
+            <div className="space-y-4">
+              {paragraphs.map((paragraph, index) => (
+                <p key={index} className="text-justify leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
             </div>
+          ) : (
+            <p className="text-slate-400 italic">Your body content will appear here...</p>
           )}
-          <figcaption className="text-xs text-slate-500 mt-2 italic text-center">
-            Image caption placeholder
-          </figcaption>
-        </figure>
-      )}
+        </div>
 
-      {/* Two-Column Body Content */}
-      <div className="magazine-body text-slate-700 mb-8">
-        {paragraphs.length > 0 ? (
-          <div className="two-column">
-            {paragraphs.map((paragraph, index) => (
-              <p key={index} className="mb-4 text-justify">
-                {paragraph}
-              </p>
-            ))}
-          </div>
-        ) : (
-          <p className="text-slate-400 italic">Your body content will appear here in a two-column layout...</p>
-        )}
+        {/* Right Column: Quote + Image */}
+        <div className="space-y-6">
+          {/* Quote Block */}
+          {settings.includeQuote && content.quote && (
+            <blockquote className="magazine-quote text-lg md:text-xl text-slate-600 py-6 px-4 md:px-6 border-l-4 border-amber-500 bg-amber-50/50 rounded-r-lg">
+              <p className="italic">"{content.quote}"</p>
+              {content.quoteAttribution && (
+                <footer className="mt-4 text-sm text-slate-500 not-italic font-medium">
+                  — {content.quoteAttribution}
+                </footer>
+              )}
+            </blockquote>
+          )}
+
+          {/* Smart Image */}
+          {settings.includeImage && (
+            <figure>
+              <SmartImage
+                src={content.imagePreview || ''}
+                alt="Featured"
+              />
+              {content.imagePreview && (
+                <figcaption className="text-xs text-slate-500 mt-2 italic text-center">
+                  Featured image
+                </figcaption>
+              )}
+            </figure>
+          )}
+        </div>
       </div>
-
-      {/* Quote Block - Centered */}
-      {settings.includeQuote && content.quote && (
-        <blockquote className="magazine-quote text-xl text-center text-slate-600 my-10 py-6 px-8 border-l-0 border-y border-amber-300 bg-amber-50/50">
-          <p className="italic">"{content.quote}"</p>
-          {content.quoteAttribution && (
-            <footer className="mt-4 text-sm text-slate-500 not-italic font-medium">
-              — {content.quoteAttribution}
-            </footer>
-          )}
-        </blockquote>
-      )}
 
       {/* Footer Branding */}
       <footer className="mt-12 pt-6 border-t border-slate-200">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-amber-600 font-semibold tracking-wide">EVOLUTION</p>
+            <p className="text-xs text-amber-600 font-semibold tracking-wide">EVOLUTION STABLES</p>
             <p className="text-xs text-slate-400">Premium Content</p>
           </div>
           <p className="text-xs text-slate-400">Editorial Layout</p>

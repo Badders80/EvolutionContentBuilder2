@@ -11,13 +11,16 @@ import {
   X,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { GeminiPanel } from '../GeminiPanel';
 import type { ContentMode, LayoutType, DevicePreview } from '../../types';
+import type { GeminiContentResult } from '../../hooks/useGemini';
 
 interface SidebarProps {
   onGenerate: () => void;
   onExportPDF: () => void;
   onExportHTMLFull: () => void;
   onExportHTMLSlim: () => void;
+  onGeminiFill: (result: GeminiContentResult) => void;
 }
 
 const modes: { value: ContentMode; label: string }[] = [
@@ -41,7 +44,7 @@ const devices: { value: DevicePreview; icon: typeof Monitor; label: string }[] =
   { value: 'mobile', icon: Smartphone, label: 'Mobile' },
 ];
 
-export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTMLSlim }: SidebarProps) {
+export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTMLSlim, onGeminiFill }: SidebarProps) {
   const { settings, updateSettings, sidebarOpen, setSidebarOpen, isGenerated } = useApp();
 
   return (
@@ -185,6 +188,9 @@ export function Sidebar({ onGenerate, onExportPDF, onExportHTMLFull, onExportHTM
             </div>
           </div>
         </div>
+
+        {/* Gemini AI Assistant Panel */}
+        <GeminiPanel onFill={onGeminiFill} />
 
         {/* Actions */}
         <div className="p-4 border-t border-slate-700 space-y-2">

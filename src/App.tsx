@@ -7,11 +7,13 @@ import { OutputPanel } from './components/OutputPanel/OutputPanel';
 import { determineTemplate } from './components/LayoutEngine/layoutRules';
 import { exportToPDF } from './utils/exportToPDF';
 import { exportToHTMLFull, exportToHTMLSlim } from './utils/exportToHTML';
+import type { GeminiContentResult } from './hooks/useGemini';
 
 function AppContent() {
   const { 
     content, 
     settings, 
+    updateContent,
     setIsGenerated, 
     setActiveTemplate, 
     sidebarOpen, 
@@ -38,6 +40,21 @@ function AppContent() {
     exportToHTMLSlim(outputRef.current, 'evolution-magazine-slim');
   };
 
+  // Auto-fill editor fields from Gemini AI response
+  const handleGeminiFill = (result: GeminiContentResult) => {
+    updateContent({
+      headline: result.headline,
+      subheadline: result.subheadline,
+      body: result.body,
+      quote: result.quote,
+      quoteAttribution: result.attribution,
+    });
+    // Auto-generate preview after filling
+    const template = determineTemplate(result.body, settings.layoutType);
+    setActiveTemplate(template);
+    setIsGenerated(true);
+  };
+
   return (
     <div className="h-screen flex flex-col lg:flex-row overflow-hidden bg-slate-100">
       {/* Mobile Header */}
@@ -60,6 +77,7 @@ function AppContent() {
         onExportPDF={handleExportPDF}
         onExportHTMLFull={handleExportHTMLFull}
         onExportHTMLSlim={handleExportHTMLSlim}
+        onGeminiFill={handleGeminiFill}
       />
 
       {/* Main Content Area */}

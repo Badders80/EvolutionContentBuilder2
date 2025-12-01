@@ -1,12 +1,56 @@
-import { useRef } from 'react';
-import { Upload, X, Type, AlignLeft, MessageSquareQuote, User } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { Upload, X, Type, AlignLeft, MessageSquareQuote, User, Sparkles, FileText, AlertCircle } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useLayoutEngine } from '../LayoutEngine/useLayoutEngine';
+import { useGemini } from '../../hooks/useGemini';
+import { determineTemplate } from '../LayoutEngine/layoutRules';
 
 export function Editor() {
-  const { content, settings, updateContent, isGenerated } = useApp();
+  const { content, settings, updateContent, isGenerated, setIsGenerated, setActiveTemplate } = useApp();
   const { wordCount, templateName } = useLayoutEngine();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Raw input state
+  const [rawInput, setRawInput] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { generateContent, isConfigured } = useGemini();
+
+  // Handle generating structured content from raw input
+  const handleGenerateStructured = async () => {
+    if (!rawInput.trim()) {
+      setError('Please paste your transcript or raw content first');
+      return;
+    }
+
+    setIsGenerating(true);
+    setError(null);
+
+    try {
+      const result = await generateContent(rawInput);
+      
+      // Auto-fill all editor fields
+      updateContent({
+        headline: result.headline,
+        subheadline: result.subheadline,
+        body: result.body,
+        quote: result.quote,
+        quoteAttribution: result.attribution,
+      });
+
+      // Auto-generate preview
+      const template = determineTemplate(result.body, settings.layoutType);
+      setActiveTemplate(template);
+      setIsGenerated(true);
+      
+      // Clear raw input after successful generation
+      setRawInput('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate content');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -47,6 +91,70 @@ export function Editor() {
           <div className="text-right">
             <p className="text-2xl font-bold text-slate-700">{wordCount}</p>
             <p className="text-xs text-slate-500">words</p>
+          </div>
+        </div>
+
+        {/* RAW INPUT SECTION - Always visible at top */}
+        <div className="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl">
+          <div className="flex items-center gap-2 mb-3">
+            <FileText size={18} className="text-purple-600" />
+            <label className="text-sm font-semibold text-purple-900">
+              Raw Input (Transcript / Notes)
+            </label>
+          </div>
+          
+          <textarea
+            value={rawInput}
+            onChange={(e) => setRawInput(e.target.value)}
+            placeholder="Paste your transcript, interview notes, race commentary, or any raw content here... Gemini will convert it into structured magazine content."
+            rows={5}
+            className="w-full px-4 py-3 bg-white border border-purple-200 rounded-lg text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+          />
+
+          {error && (
+            <div className="flex items-center gap-2 mt-2 p-2 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs">
+              <AlertCircle size={14} />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {!isConfigured && (
+            <div className="flex items-center gap-2 mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs">
+              <AlertCircle size={14} />
+              <span>Set VITE_GEMINI_KEY in .env to enable AI generation</span>
+            </div>
+          )}
+
+          <button
+            onClick={handleGenerateStructured}
+            disabled={isGenerating || !isConfigured || !rawInput.trim()}
+            className="mt-3 w-full flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white py-2.5 px-4 rounded-lg font-medium transition-colors"
+          >
+            {isGenerating ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Sparkles size={18} />
+                Generate Structured Content
+              </>
+            )}
+          </button>
+
+          <p className="mt-2 text-xs text-purple-600 text-center">
+            AI will auto-fill: Headline, Subheadline, Body, Quote & Attribution
+          </p>
+        </div>
+
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200"></div>
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="px-3 bg-slate-50 text-slate-500 font-medium">Or edit fields manually</span>
           </div>
         </div>
 
