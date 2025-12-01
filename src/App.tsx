@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { Menu } from 'lucide-react';
-import { AppProvider, useApp } from './context/AppContext';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Editor } from './components/Editor/Editor';
 import { OutputPanel } from './components/OutputPanel/OutputPanel';
@@ -8,24 +7,24 @@ import { determineTemplate } from './components/LayoutEngine/layoutRules';
 import { exportToPDF } from './utils/exportToPDF';
 import { exportToHTMLFull, exportToHTMLSlim } from './utils/exportToHTML';
 import type { GeminiContentResult } from './hooks/useGemini';
+import { useAppStore } from './store/useAppStore';
+import { AssistantPanel } from './components/Assistant/AssistantPanel';
 
 function AppContent() {
-  const { 
-    content, 
-    settings, 
-    updateContent,
-    setIsGenerated, 
-    setActiveTemplate, 
-    sidebarOpen, 
-    setSidebarOpen 
-  } = useApp();
-  
+  const content = useAppStore((s) => s.content);
+  const settings = useAppStore((s) => s.settings);
+  const updateContent = useAppStore((s) => s.updateContent);
+  const setGenerated = useAppStore((s) => s.setGenerated);
+  const setActiveTemplate = useAppStore((s) => s.setActiveTemplate);
+  const sidebarOpen = useAppStore((s) => s.sidebarOpen);
+  const setSidebarOpen = useAppStore((s) => s.setSidebarOpen);
+
   const outputRef = useRef<HTMLDivElement>(null);
 
   const handleGenerate = () => {
     const template = determineTemplate(content.body, settings.layoutType);
     setActiveTemplate(template);
-    setIsGenerated(true);
+    setGenerated(true);
   };
 
   const handleExportPDF = async () => {
@@ -47,12 +46,12 @@ function AppContent() {
       subheadline: result.subheadline,
       body: result.body,
       quote: result.quote,
-      quoteAttribution: result.attribution,
+      quoteAttribution: result.quoteAttribution,
     });
     // Auto-generate preview after filling
     const template = determineTemplate(result.body, settings.layoutType);
     setActiveTemplate(template);
-    setIsGenerated(true);
+    setGenerated(true);
   };
 
   return (
@@ -87,17 +86,14 @@ function AppContent() {
         
         {/* Output Panel */}
         <OutputPanel ref={outputRef} onGenerate={handleGenerate} />
+
+        {/* Assistant History */}
+        <AssistantPanel />
       </main>
     </div>
   );
 }
 
-function App() {
-  return (
-    <AppProvider>
-      <AppContent />
-    </AppProvider>
-  );
+export default function App() {
+  return <AppContent />;
 }
-
-export default App;

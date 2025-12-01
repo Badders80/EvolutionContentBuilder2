@@ -2,6 +2,7 @@ import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
 import { SmartImage } from '../SmartImage';
 import { useAppStore } from '../../store/useAppStore';
+import { useAssistantStore } from '../../store/useAssistantStore';
 
 /**
  * Premium greyscale editorial output template
@@ -10,6 +11,7 @@ import { useAppStore } from '../../store/useAppStore';
 export function EditorialOutput() {
   const content = useAppStore((s) => s.content);
   const settings = useAppStore((s) => s.settings);
+  const setTargetField = useAssistantStore((s) => s.setTargetField);
 
   // Split body into paragraphs
   const paragraphs = content.body.split(/\n{2,}/).filter(Boolean);
@@ -26,19 +28,28 @@ export function EditorialOutput() {
           {/* Left Column: Headline, Subheadline, Body */}
           <div>
             {/* Headline */}
-            <h1 className="editorial-headline text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight mb-3 text-es-text">
+            <h1
+              className="editorial-headline text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight mb-3 text-es-text cursor-pointer hover:bg-es-bgSoft transition-colors"
+              onClick={() => setTargetField('headline')}
+            >
               {content.headline || 'Your Headline Here'}
             </h1>
 
             {/* Subheadline / standfirst */}
             {content.subheadline && (
-              <p className="font-serif text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+              <p
+                className="font-serif text-es-textSoft text-[1.2rem] leading-relaxed mb-8 cursor-pointer hover:bg-es-bgSoft transition-colors"
+                onClick={() => setTargetField('subheadline')}
+              >
                 {content.subheadline}
               </p>
             )}
 
             {/* Body Paragraphs */}
-            <div className="editorial-body text-es-text">
+            <div
+              className="editorial-body text-es-text cursor-pointer hover:bg-es-bgSoft transition-colors"
+              onClick={() => setTargetField('body')}
+            >
               {paragraphs.length > 0 ? (
                 paragraphs.map((para, idx) => (
                   <p
@@ -65,7 +76,10 @@ export function EditorialOutput() {
             {/* Quote Block */}
             {settings.includeQuote && content.quote && (
               <figure className="border-l-2 border-es-borderStrong pl-4">
-                <blockquote className="editorial-quote italic text-sm text-es-textSoft mb-2">
+                <blockquote
+                  className="editorial-quote italic text-sm text-es-textSoft mb-2 cursor-pointer hover:bg-es-bgSoft transition-colors"
+                  onClick={() => setTargetField('quote')}
+                >
                   "{content.quote}"
                 </blockquote>
                 {content.quoteAttribution && (

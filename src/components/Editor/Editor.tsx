@@ -4,6 +4,8 @@ import { useLayoutEngine } from '../LayoutEngine/useLayoutEngine';
 import { useGemini } from '../../hooks/useGemini';
 import { determineTemplate } from '../LayoutEngine/layoutRules';
 import { useAppStore } from '../../store/useAppStore';
+import { AssistantBar } from '../Assistant/AssistantBar';
+import { useAssistantStore } from '../../store/useAssistantStore';
 
 export function Editor() {
   const content = useAppStore((s) => s.content);
@@ -12,6 +14,7 @@ export function Editor() {
   const isGenerated = useAppStore((s) => s.isGenerated);
   const setGenerated = useAppStore((s) => s.setGenerated);
   const setActiveTemplate = useAppStore((s) => s.setActiveTemplate);
+  const setSelectionText = useAssistantStore((s) => s.setSelectionText);
   const { wordCount, templateName } = useLayoutEngine();
   const fileInputRef = useRef<HTMLInputElement>(null);
   
@@ -20,10 +23,7 @@ export function Editor() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [targetWordCount, setTargetWordCount] = useState<number | null>(null);
-  const [assistantQuery, setAssistantQuery] = useState('');
-  const [assistantResponse, setAssistantResponse] = useState('');
-  const [assistantLoading, setAssistantLoading] = useState(false);
-  const { generateContent, isConfigured } = useGemini();
+  const { generateFromTranscript, isConfigured } = useGemini();
 
   // Word count target handlers
   const handleWordTarget = (direction: 'increase' | 'decrease') => {
@@ -34,6 +34,19 @@ export function Editor() {
       return next;
     });
   };
+
+  function handleBodySelect(
+    e: React.SyntheticEvent<HTMLTextAreaElement>
+  ) {
+    const target = e.currentTarget;
+    const { selectionStart, selectionEnd, value } = target;
+    if (selectionStart === selectionEnd) {
+      setSelectionText(null);
+      return;
+    }
+    const selected = value.slice(selectionStart, selectionEnd);
+    setSelectionText(selected);
+  }
 
   // Handle generating structured content from raw input
   const handleGenerateStructured = async () => {
@@ -46,7 +59,11 @@ export function Editor() {
     setError(null);
 
     try {
-      const result = await generateContent(rawInput);
+      const desiredWordCount = targetWordCount ?? (wordCount || 150);
+      const result = await generateFromTranscript({
+        transcript: rawInput,
+        targetWordCount: desiredWordCount,
+      });
       
       // Auto-fill all editor fields
       updateContent({
@@ -54,7 +71,7 @@ export function Editor() {
         subheadline: result.subheadline,
         body: result.body,
         quote: result.quote,
-        quoteAttribution: result.attribution,
+        quoteAttribution: result.quoteAttribution,
       });
 
       // Auto-generate preview
@@ -90,41 +107,6 @@ export function Editor() {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
-
-  const handleAskAssistant = async () => {
-    if (!assistantQuery.trim()) return;
-
-    setAssistantLoading(true);
-
-    try {
-      const res = await fetch('/api/seek', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: assistantQuery,
-          content: {
-            headline: content.headline,
-            subheadline: content.subheadline,
-            body: content.body,
-            quote: content.quote,
-            attribution: content.quoteAttribution,
-          },
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data?.updatedFields) {
-        updateContent(data.updatedFields);
-      }
-
-      setAssistantResponse(data?.answer || 'OK');
-    } catch (err) {
-      setAssistantResponse('Error contacting assistant.');
-    }
-
-    setAssistantLoading(false);
   };
 
   return (
@@ -275,7 +257,8 @@ export function Editor() {
           <textarea
             value={content.body}
             onChange={(e) => updateContent({ body: e.target.value })}
-            placeholder="Write your article content here..."
+            onSelect={handleBodySelect}
+            placeholder="Write the main body copy here..."
             rows={10}
             className="w-full px-4 py-3 bg-white border border-es-border rounded-md text-sm leading-relaxed font-serif placeholder:text-es-muted focus:outline-none focus:ring-2 focus:ring-es-borderStrong focus:border-transparent resize-none"
           />
@@ -384,33 +367,7 @@ export function Editor() {
           </div>
         )}
 
-        {/* Assistant Panel */}
-        <div className="mt-10 border-t border-es-border pt-6">
-          <p className="text-xs uppercase tracking-wide text-es-textSoft mb-2">
-            Assistant
-          </p>
-
-          <div className="flex gap-2">
-            <input
-              type="text"
-              placeholder="Ask a question about your content..."
-              className="flex-1 border border-es-border rounded px-3 py-2 text-sm"
-              value={assistantQuery}
-              onChange={(e) => setAssistantQuery(e.target.value)}
-            />
-            <button
-              onClick={handleAskAssistant}
-              disabled={assistantLoading}
-              className="bg-black text-white px-4 py-2 text-sm rounded disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {assistantLoading ? 'Asking…' : 'Ask'}
-            </button>
-          </div>
-
-          <div className="mt-4 bg-es-muted/40 p-4 rounded text-sm leading-relaxed min-h-[3rem]">
-            {assistantResponse || 'The assistant will respond here…'}
-          </div>
-        </div>
+        <AssistantBar />
       </div>
     </div>
   );

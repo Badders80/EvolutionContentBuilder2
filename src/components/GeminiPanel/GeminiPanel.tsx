@@ -14,7 +14,7 @@ export function GeminiPanel({ onFill }: GeminiPanelProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const { generateContent, isConfigured } = useGemini();
+  const { generateFromTranscript, isConfigured } = useGemini();
 
   async function handleGenerate() {
     if (!input.trim()) {
@@ -26,7 +26,10 @@ export function GeminiPanel({ onFill }: GeminiPanelProps) {
     setError(null);
 
     try {
-      const result = await generateContent(input);
+      const result = await generateFromTranscript({
+        transcript: input,
+        targetWordCount: 180,
+      });
       onFill(result);
       setInput(''); // Clear after successful generation
       setIsExpanded(false); // Collapse panel after success
