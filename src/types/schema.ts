@@ -27,8 +27,9 @@ export const ContentDataSchema = z.object({
   body: z.string().default(""),
   quote: z.string().default(""),
   quoteAttribution: z.string().default(""),
+  featuredImageUrl: z.string().default(""),
+  footer: z.string().default(""),
   imageFile: z.custom<File>((v) => v instanceof File).nullable().default(null),
-  imagePreview: z.string().nullable().default(null),
   caption: z.string().default(""),
 });
 

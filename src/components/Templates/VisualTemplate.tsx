@@ -1,9 +1,8 @@
 import { SmartImage } from '../SmartImage';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppContext } from '../../context/AppContext';
 
 export function VisualTemplate() {
-  const content = useAppStore((s) => s.content);
-  const settings = useAppStore((s) => s.settings);
+  const { structured: content, settings } = useAppContext();
 
   return (
     <article className="magazine-template min-h-full p-6 md:p-8">
@@ -49,7 +48,7 @@ export function VisualTemplate() {
           {/* Smart Image */}
           {settings.includeImage && (
             <SmartImage
-              src={content.imagePreview || ''}
+              src={content.featuredImageUrl || ''}
               alt="Featured"
             />
           )}

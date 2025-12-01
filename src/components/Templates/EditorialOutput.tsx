@@ -1,17 +1,14 @@
 import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
 import { SmartImage } from '../SmartImage';
-import { useAppStore } from '../../store/useAppStore';
-import { useAssistantStore } from '../../store/useAssistantStore';
+import { useAppContext } from '../../context/AppContext';
 
 /**
  * Premium greyscale editorial output template
  * Uses Lora font, clean typography hierarchy, and responsive grid
  */
 export function EditorialOutput() {
-  const content = useAppStore((s) => s.content);
-  const settings = useAppStore((s) => s.settings);
-  const setTargetField = useAssistantStore((s) => s.setTargetField);
+  const { structured: content, settings, setTargetField } = useAppContext();
 
   // Split body into paragraphs
   const paragraphs = content.body.split(/\n{2,}/).filter(Boolean);
@@ -94,12 +91,12 @@ export function EditorialOutput() {
             {settings.includeImage && (
               <figure className="mt-2">
                 <SmartImage
-                  src={content.imagePreview || ''}
-                  alt={content.imageCaption || content.headline || 'Featured image'}
+                  src={content.featuredImageUrl || ''}
+                  alt={content.caption || content.headline || 'Featured image'}
                 />
-                {content.imageCaption && (
+                {content.caption && (
                   <figcaption className="mt-2 text-[0.7rem] text-es-muted text-center italic">
-                    {content.imageCaption}
+                    {content.caption}
                   </figcaption>
                 )}
               </figure>

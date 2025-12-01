@@ -1,4 +1,4 @@
-import { useAssistantStore } from '../../store/useAssistantStore';
+import { useAppContext } from '../../context/AppContext';
 
 const fields = [
   { id: 'headline', label: 'Headline' },
@@ -8,8 +8,7 @@ const fields = [
 ] as const;
 
 export function AssistantFieldChips() {
-  const targetField = useAssistantStore((s) => s.targetField);
-  const setTargetField = useAssistantStore((s) => s.setTargetField);
+  const { targetField, setTargetField } = useAppContext();
 
   return (
     <div className="flex flex-wrap gap-2 mb-3">

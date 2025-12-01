@@ -1,9 +1,8 @@
 import { SmartImage } from '../SmartImage';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppContext } from '../../context/AppContext';
 
 export function EditorialTemplate() {
-  const content = useAppStore((s) => s.content);
-  const settings = useAppStore((s) => s.settings);
+  const { structured: content, settings } = useAppContext();
 
   // Split body into paragraphs
   const paragraphs = content.body.split('\n\n').filter(p => p.trim());
@@ -57,10 +56,10 @@ export function EditorialTemplate() {
           {settings.includeImage && (
             <figure>
               <SmartImage
-                src={content.imagePreview || ''}
+                src={content.featuredImageUrl || ''}
                 alt="Featured"
               />
-              {content.imagePreview && (
+              {content.featuredImageUrl && (
                 <figcaption className="text-xs text-slate-500 mt-2 italic text-center">
                   Featured image
                 </figcaption>

@@ -1,9 +1,8 @@
 import { SmartImage } from '../SmartImage';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppContext } from '../../context/AppContext';
 
 export function LongformTemplate() {
-  const content = useAppStore((s) => s.content);
-  const settings = useAppStore((s) => s.settings);
+  const { structured: content, settings } = useAppContext();
 
   // Split body into paragraphs
   const paragraphs = content.body.split('\n\n').filter(p => p.trim());
@@ -12,10 +11,10 @@ export function LongformTemplate() {
     <article className="magazine-template min-h-full">
       {/* Full-width Hero */}
       <header className="relative mb-8">
-        {settings.includeImage && content.imagePreview ? (
+        {settings.includeImage && content.featuredImageUrl ? (
           <div className="relative h-64 md:h-80 overflow-hidden">
             <img
-              src={content.imagePreview}
+              src={content.featuredImageUrl}
               alt="Featured"
               className="w-full h-full object-cover"
             />
@@ -89,7 +88,7 @@ export function LongformTemplate() {
               </div>
 
               {/* Secondary image placement for longform */}
-              {settings.includeImage && !content.imagePreview && (
+              {settings.includeImage && !content.featuredImageUrl && (
                 <SmartImage src="" alt="Featured" />
               )}
             </div>
