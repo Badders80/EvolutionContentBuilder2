@@ -1,6 +1,4 @@
-import { useAppStore } from '../../../store/useAppStore';
-import WatermarkFull from '../../../assets/Evolution-Watermark-Black.svg';
-import WatermarkOneLine from '../../../assets/Evolution-Watermark-OneLine-Black.svg';
+import { useAppContext } from '../../../context/AppContext';
 
 const modeLabels: Record<string, string> = {
   'pre-race': 'PRE-RACE PREVIEW',
@@ -11,17 +9,17 @@ const modeLabels: Record<string, string> = {
 };
 
 export function EditorialHeader() {
-  const settings = useAppStore((s) => s.settings);
+  const { settings } = useAppContext();
   const label = modeLabels[settings.mode] || 'EDITORIAL';
 
-  const logoSrc = settings.devicePreview === 'mobile' ? WatermarkFull : WatermarkOneLine;
-
   return (
-    <header className="w-full pb-3 mb-8 flex items-baseline justify-between">
+    <header className="w-full pb-3 mb-8 border-b-2 border-black flex items-baseline justify-between">
       <div className="flex items-center">
-        <img src={logoSrc} alt="Evolution Stables" className="h-6" />
+        <h1 className="font-sans font-bold text-xl md:text-2xl uppercase tracking-tight text-black">
+          EVOLUTION STABLES
+        </h1>
       </div>
-      <div className="font-sans tracking-[0.18em] text-[0.7rem] uppercase text-es-textSoft font-normal">
+      <div className="font-sans tracking-[0.18em] text-[0.7rem] uppercase text-black font-bold">
         {label}
       </div>
     </header>

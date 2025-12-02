@@ -1,59 +1,60 @@
 export function EditorialFooter() {
   return (
-    <footer className="mt-12 bg-es-bg text-es-textSoft">
-      <div className="mx-auto flex max-w-5xl flex-col px-4 pt-10 pb-8 md:px-6 md:pt-12 md:pb-10">
-        {/* Hero Tagline Block with two solid rules matching article width */}
-        <div className="max-w-4xl mx-auto border-b-2 border-black mb-10" />
-        <div className="flex flex-col items-center justify-center text-center py-8 md:py-10">
-          <div className="max-w-3xl space-y-4">
-            <div className="flex flex-col items-center gap-1">
-              <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl font-normal text-es-text tracking-tight">
-                The Future of Ownership
+    <footer className="relative bg-white overflow-hidden">
+      <div className="mx-auto flex max-w-6xl flex-col px-8 pt-12 pb-8 md:px-16 md:pt-16 md:pb-12">
+        {/* Top Border */}
+        <div className="w-full max-w-4xl border-t-2 border-black mb-12 md:mb-16 self-center"></div>
+        
+        {/* Hero Tagline - Centerpiece */}
+        <div className="flex flex-col items-center justify-center text-center py-12 md:py-16 animate-fade-in">
+          <div className="max-w-4xl space-y-6">
+            <div className="flex items-center justify-center">
+              <h2 className="font-serif text-xl md:text-2xl lg:text-3xl font-normal text-black tracking-tight whitespace-nowrap">
+                The Future of Ownership Has Arrived
               </h2>
-              <p className="font-serif text-2xl md:text-3xl lg:text-4xl font-normal text-es-text">
-                Has Arrived
-              </p>
             </div>
-            <p className="text-xs md:text-sm font-light text-es-textSoft">
-              Digital-Syndication, by Evolution Stables, Powered by Tokinvest.
+            <p className="text-xs md:text-sm font-light text-gray-500">
+              Digital-Syndication, by Evolution Stables, Powered By Tokinvest
             </p>
           </div>
         </div>
-        <div className="max-w-4xl mx-auto border-b-2 border-black mt-6 mb-8" />
 
-        {/* Bottom bar */}
-        <div className="flex flex-col gap-4 text-[0.7rem] md:flex-row md:justify-between md:items-center">
-          {/* Left: legal text */}
+        {/* Bottom Border */}
+        <div className="w-full max-w-4xl border-b-2 border-black my-8 self-center"></div>
+
+        {/* Bottom Section - Footer Bar */}
+        <div className="flex flex-col gap-6 text-[10px] md:text-xs text-gray-500 md:flex-row md:justify-between md:items-center">
+          {/* Left: Legal Links & Copyright */}
           <div className="flex flex-col gap-2">
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3 [&_a]:transition-colors [&_a]:font-extralight">
               <a
                 href="/privacy"
-                className="leading-tight font-light text-es-textSoft hover:text-es-text transition-colors"
+                className="leading-tight text-gray-500 hover:text-black transition-colors"
               >
                 Privacy Policy
               </a>
               <a
                 href="/terms"
-                className="leading-tight font-light text-es-textSoft hover:text-es-text transition-colors"
+                className="leading-tight text-gray-500 hover:text-black transition-colors"
               >
                 Terms of Service
               </a>
             </div>
-            <p className="text-[0.65rem] leading-tight font-light text-es-textSoft">
-              © {new Date().getFullYear()} Evolution Stables.
+            <p className="leading-tight font-extralight text-gray-500">
+              &copy; 2025 Evolution Stables.
             </p>
           </div>
 
-          {/* Right: social icons */}
-          <div className="flex items-center justify-start gap-4 md:justify-end text-es-textSoft">
+          {/* Right: Social Icons */}
+          <div className="flex items-center justify-start gap-6 md:justify-end">
             <a
               href="https://x.com/evostables"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors hover:text-es-text flex items-center"
-              aria-label="Follow Evolution Stables on X"
+              className="transition flex items-center text-gray-500 hover:text-black"
+              aria-label="Follow us on X"
             >
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
@@ -61,10 +62,10 @@ export function EditorialFooter() {
               href="https://instagram.com/evostables"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors hover:text-es-text flex items-center"
-              aria-label="Follow Evolution Stables on Instagram"
+              className="transition flex items-center text-gray-500 hover:text-black"
+              aria-label="Follow us on Instagram"
             >
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
               </svg>
             </a>
@@ -72,19 +73,19 @@ export function EditorialFooter() {
               href="https://www.linkedin.com/in/alex-baddeley/"
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors hover:text-es-text flex items-center"
-              aria-label="Connect with Evolution Stables on LinkedIn"
+              className="transition flex items-center text-gray-500 hover:text-black"
+              aria-label="Connect on LinkedIn"
             >
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
               </svg>
             </a>
             <a
               href="mailto:alex@evolutionstables.nz"
-              className="transition-colors hover:text-es-text flex items-center"
-              aria-label="Email Evolution Stables"
+              className="transition flex items-center text-gray-500 hover:text-black"
+              aria-label="Send us an email"
             >
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
               </svg>
             </a>

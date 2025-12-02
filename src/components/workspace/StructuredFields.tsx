@@ -3,13 +3,42 @@ import { useAppContext } from "../../context/AppContext";
 import type { StructuredFields as StructuredFieldsType } from "../../types";
 
 export const StructuredFields: React.FC = () => {
-  const { structured, updateStructuredField, saveCurrentBuild } = useAppContext();
+  const {
+    structured,
+    settings,
+    updateStructuredField,
+    updateStructuredFields,
+    updateSettings,
+    saveCurrentBuild,
+  } = useAppContext();
+
+  const modeOptions = [
+    { value: "pre-race", label: "Pre Race" },
+    { value: "post-race", label: "Post Race" },
+    { value: "trainer", label: "Trainer Update" },
+    { value: "investor", label: "Investor Update" },
+    { value: "social", label: "Social Feature" },
+  ] as const;
 
   const handleChange =
     (field: keyof StructuredFieldsType) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       updateStructuredField(field, e.target.value);
     };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateStructuredFields({
+          imageFile: file,
+          imagePreview: reader.result as string
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   return (
     <div className="space-y-3">
@@ -29,6 +58,27 @@ export const StructuredFields: React.FC = () => {
         >
           Save Build
         </button>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-[11px] font-semibold">Build Type</label>
+        <div className="flex flex-wrap gap-2">
+          {modeOptions.map(({ value, label }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => updateSettings({ mode: value })}
+              className={`text-[11px] px-3 py-2 rounded border transition ${
+                settings.mode === value
+                  ? "bg-slate-900 text-white border-slate-900"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+              aria-pressed={settings.mode === value}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -78,12 +128,42 @@ export const StructuredFields: React.FC = () => {
       </div>
 
       <div className="space-y-2">
-        <label className="block text-[11px] font-semibold">Featured Image URL</label>
-        <input
-          className="w-full border rounded px-2 py-1 text-xs"
-          value={structured.featuredImageUrl}
-          onChange={handleChange("featuredImageUrl")}
-        />
+        <label className="block text-[11px] font-semibold">Featured Image</label>
+        <div className="space-y-2 p-2 border rounded bg-white">
+          {structured.imagePreview ? (
+            <div className="relative group">
+              <img 
+                src={structured.imagePreview} 
+                alt="Preview" 
+                className="w-full h-32 object-cover rounded border bg-slate-100" 
+              />
+              <button
+                onClick={() => updateStructuredFields({ imageFile: null, imagePreview: null })}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                title="Remove Image"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center w-full">
+              <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-slate-100">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg className="w-6 h-6 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                  <p className="text-[10px] text-slate-500">Click to upload image</p>
+                </div>
+                <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+              </label>
+            </div>
+          )}
+          
+          <input
+            placeholder="Image Caption"
+            className="w-full border rounded px-2 py-1 text-xs"
+            value={structured.caption}
+            onChange={handleChange("caption")}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">

@@ -51,11 +51,7 @@ export function EditorialOutput() {
                 paragraphs.map((para, idx) => (
                   <p
                     key={idx}
-                    className={`text-sm md:text-[0.95rem] leading-relaxed mb-4 ${
-                      idx === 0
-                        ? 'first-letter:text-4xl first-letter:float-left first-letter:mr-2 first-letter:font-semibold first-letter:leading-none'
-                        : ''
-                    }`}
+                    className="text-sm md:text-[0.95rem] leading-relaxed mb-4"
                   >
                     {para}
                   </p>
@@ -91,7 +87,7 @@ export function EditorialOutput() {
             {settings.includeImage && (
               <figure className="mt-2">
                 <SmartImage
-                  src={content.featuredImageUrl || ''}
+                  src={content.imagePreview || content.featuredImageUrl || ''}
                   alt={content.caption || content.headline || 'Featured image'}
                 />
                 {content.caption && (

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { EditorialOutput } from '../Templates/EditorialOutput';
 import { Sparkles } from 'lucide-react';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppContext } from '../../context/AppContext';
 
 interface OutputPanelProps {
   onGenerate: () => void;
@@ -9,8 +9,8 @@ interface OutputPanelProps {
 
 export const OutputPanel = forwardRef<HTMLDivElement, OutputPanelProps>(
   function OutputPanel({ onGenerate }, ref) {
-    const isGenerated = useAppStore((s) => s.isGenerated);
-    const settings = useAppStore((s) => s.settings);
+    const { structured, settings } = useAppContext();
+    const isGenerated = !!structured.body || !!structured.headline;
 
     // Device preview widths
     const deviceWidths = {

@@ -1,4 +1,4 @@
-import { initialContent, type ContentData } from "./types/index";
+import { initialContent, type ContentData, type AppSettings } from "./types/index";
 
 export type SectionId = "create" | "saved" | "history" | "templates" | "settings";
 
@@ -20,6 +20,7 @@ export interface SavedBuild {
   model: string;
   messages: AIMessage[];
   structured: ContentData;
+  settings?: AppSettings;
 }
 
 export const EMPTY_STRUCTURED = initialContent;

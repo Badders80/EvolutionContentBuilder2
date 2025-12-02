@@ -13,7 +13,7 @@ export function useAssistant() {
   // Note: updateStructuredFields in AppContext takes UpdateStructuredInput which is Partial<StructuredFields>
   // But in AppContext.tsx it was defined as updateStructuredFields(fields: UpdateStructuredInput)
   // Let's check AppContext interface again.
-  const { appendMessage, updateStructuredFields } = useAppContext();
+  const { appendMessage, updateStructuredFields, currentModel } = useAppContext();
   const [loading, setLoading] = useState(false);
 
   const runCommand = async (rawInput: string) => {
@@ -43,27 +43,10 @@ ${SYSTEM_PROMPT}
 ${rawInput}
 `;
 
-      // Fallback strategy: 3.0 Pro -> 3.0 -> 2.0 Pro -> 1.5 Pro
-      const modelsToTry = ["gemini-3.0-pro", "gemini-3.0", "gemini-2.0-pro", "gemini-1.5-pro"];
-      let response;
-      let lastError;
-
-      for (const modelName of modelsToTry) {
-        try {
-          console.log(`Attempting generation with model: ${modelName}`);
-          const model = genAI.getGenerativeModel({ model: modelName });
-          response = await model.generateContent(prompt);
-          if (response) break; // Success
-        } catch (e) {
-          console.warn(`Model ${modelName} failed:`, e);
-          lastError = e;
-          continue; // Try next model
-        }
-      }
-
-      if (!response) {
-        throw lastError || new Error("All models failed to generate content");
-      }
+      // Use the model selected in the UI/Context
+      console.log(`Generating with selected model: ${currentModel}`);
+      const model = genAI.getGenerativeModel({ model: currentModel });
+      const response = await model.generateContent(prompt);
 
       const textRaw = response?.response?.text?.() ?? "";
       console.log("Gemini Raw Response:", textRaw); // Debug log

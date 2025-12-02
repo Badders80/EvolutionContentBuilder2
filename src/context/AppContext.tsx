@@ -27,6 +27,7 @@ export interface AppContextValue {
   structured: StructuredFields;
   setStructured: (s: StructuredFields) => void;
   updateStructuredField: (field: keyof StructuredFields, value: string) => void;
+  updateStructuredFields: (fields: Partial<StructuredFields>) => void;
 
   settings: AppSettings;
   updateSettings: (settings: Partial<AppSettings>) => void;
@@ -41,12 +42,6 @@ export interface AppContextValue {
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
-
-type AppendLogInput = {
-  role: AIMessage["role"];
-  content: string;
-  createdAt?: number;
-};
 
 type UpdateStructuredInput = Partial<StructuredFields>;
 
@@ -92,18 +87,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const clearMessages = () => setMessages([]);
 
-  const appendAILog = (msg: AppendLogInput) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        role: msg.role,
-        content: msg.content,
-        createdAt: msg.createdAt ?? Date.now(),
-      },
-    ]);
-  };
-
   const updateStructuredField = (field: keyof StructuredFields, value: string) => {
     setStructured((prev) => ({
       ...prev,
@@ -141,6 +124,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           messages,
           structured,
           model: currentModel,
+          settings,
         };
         const copy = [...prev];
         copy[existingIndex] = updated;
@@ -156,6 +140,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         model: currentModel,
         messages,
         structured,
+        settings,
       };
       return [newBuild, ...prev];
     });
@@ -172,6 +157,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         name: `${build.name} (Copy)`,
         createdAt: now,
         updatedAt: now,
+        settings: build.settings ?? initialSettings,
       };
       return [copy, ...prev];
     });
@@ -193,11 +179,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         (build.structured as any).featuredImage ??
         EMPTY_STRUCTURED.featuredImageUrl,
     };
+    const mergedSettings: AppSettings = {
+      ...initialSettings,
+      ...(build.settings ?? {}),
+    };
 
     setSection("create");
     setCurrentModel(build.model);
     setMessages(build.messages);
     setStructured(migratedStructured);
+    setSettings(mergedSettings);
   };
 
   const value: AppContextValue = useMemo(
@@ -213,6 +204,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       structured,
       setStructured,
       updateStructuredField,
+      updateStructuredFields,
       settings,
       updateSettings,
       targetField,
@@ -235,4 +227,3 @@ export const useAppContext = (): AppContextValue => {
   }
   return ctx;
 };
-

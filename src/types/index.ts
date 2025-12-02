@@ -1,17 +1,10 @@
-import { z } from "zod";
-import { 
-  ContentDataSchema, 
-  AppSettingsSchema, 
-  ContentModeSchema, 
-  LayoutTypeSchema, 
-  DevicePreviewSchema,
-  initialContent as schemaInitialContent,
-  initialSettings as schemaInitialSettings
-} from "./schema";
+export type ContentMode = 'pre-race' | 'post-race' | 'trainer' | 'investor' | 'social';
 
-export * from "./schema";
+export type LayoutType = 'auto' | 'visual' | 'editorial' | 'longform';
 
 export type TemplateType = 'visual' | 'editorial' | 'longform';
+
+export type DevicePreview = 'desktop' | 'tablet' | 'mobile';
 
 export type AssistantTargetField =
   | "headline"
@@ -21,15 +14,53 @@ export type AssistantTargetField =
   | "quoteAttribution"
   | "auto";
 
-// Re-export types inferred from schema
-export type ContentMode = z.infer<typeof ContentModeSchema>;
-export type LayoutType = z.infer<typeof LayoutTypeSchema>;
-export type DevicePreview = z.infer<typeof DevicePreviewSchema>;
-export type ContentData = z.infer<typeof ContentDataSchema>;
-export type AppSettings = z.infer<typeof AppSettingsSchema>;
+export interface ContentData {
+  headline: string;
+  subheadline: string;
+  body: string;
+  quote: string;
+  quoteAttribution: string;
+  featuredImageUrl: string;
+  footer: string;
+  imageFile: File | null;
+  imagePreview: string | null;
+  caption: string;
+}
 
-// Alias StructuredFields to ContentData for backward compatibility
 export type StructuredFields = ContentData;
 
-export const initialContent: ContentData = schemaInitialContent;
-export const initialSettings: AppSettings = schemaInitialSettings;
+export interface AppSettings {
+  mode: ContentMode;
+  includeQuote: boolean;
+  includeImage: boolean;
+  layoutType: LayoutType;
+  devicePreview: DevicePreview;
+}
+
+export interface AppState {
+  content: ContentData;
+  settings: AppSettings;
+  isGenerated: boolean;
+  activeTemplate: TemplateType;
+}
+
+export const initialContent: ContentData = {
+  headline: '',
+  subheadline: '',
+  body: '',
+  quote: '',
+  quoteAttribution: '',
+  featuredImageUrl: '',
+  footer: '',
+  imageFile: null,
+  imagePreview: null,
+  caption: '',
+};
+
+export const initialSettings: AppSettings = {
+  mode: 'pre-race',
+  includeQuote: true,
+  includeImage: true,
+  layoutType: 'auto',
+  devicePreview: 'desktop',
+};
