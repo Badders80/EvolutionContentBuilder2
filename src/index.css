@@ -35,23 +35,23 @@ body {
 }
 
 .editorial-headline {
-  @apply font-serif font-semibold leading-tight text-3xl md:text-4xl text-es-text;
+  @apply font-serif font-bold leading-tight text-3xl md:text-4xl text-es-text;
 }
 
 .editorial-subheadline {
-  @apply font-sans italic text-es-textSoft text-lg;
+  @apply font-serif font-medium text-es-textSoft text-xl md:text-2xl leading-snug;
 }
 
 .editorial-body {
-  @apply font-sans text-[1rem] leading-relaxed text-es-text;
+  @apply font-sans text-sm md:text-base leading-relaxed text-es-text;
 }
 
 .editorial-quote {
-  @apply font-sans italic text-es-textSoft;
+  @apply font-serif italic text-lg md:text-xl leading-snug text-es-textSoft;
 }
 
 .editorial-caption {
-  @apply text-xs italic text-es-textSoft mt-1;
+  @apply font-sans text-xs leading-relaxed tracking-[0.06em] text-es-textSoft mt-1;
 }
 
 /* Drop cap for first paragraph */

@@ -9,10 +9,30 @@ const EvolutionLogo = () => (
   </svg>
 );
 
-export function EditorialFooter() {
+type Variant = 'default' | 'dark';
+
+export function EditorialFooter({
+  variant = 'default',
+  className = '',
+}: {
+  variant?: Variant;
+  className?: string;
+}) {
+  const isDark = variant === 'dark';
+
+  const containerClass = isDark
+    ? `relative overflow-hidden footer-shell bg-es-text text-es-textSoft ${className}`
+    : `relative bg-white overflow-hidden footer-shell ${className}`;
+
+  const innerClass = isDark
+    ? 'footer-inner mx-auto flex max-w-4xl w-full items-end justify-between px-6 pt-10 pb-4 md:px-12 text-es-textSoft min-h-[120px]'
+    : 'footer-inner mx-auto flex max-w-4xl w-full items-end justify-between px-6 pt-12 pb-6 md:px-12 border-t-2 border-black text-gray-500 min-h-[120px]';
+
+  const hoverColor = isDark ? 'hover:text-white' : 'hover:text-black';
+
   return (
-    <footer className="relative bg-white overflow-hidden footer-shell">
-      <div className="footer-inner mx-auto flex max-w-4xl w-full items-end justify-between px-6 pt-12 pb-6 md:px-12 border-t-2 border-black text-gray-500 min-h-[120px]">
+    <footer className={containerClass}>
+      <div className={innerClass}>
         <div className="footer-logo flex items-center">
           <span aria-label="Evolution Stables">
             <EvolutionLogo />
@@ -24,7 +44,7 @@ export function EditorialFooter() {
             href="https://x.com/evostables"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition flex items-center hover:text-black"
+            className={`transition flex items-center ${hoverColor}`}
             aria-label="Follow us on X"
           >
             <svg className="h-4 w-4 md:h-[1.15rem] md:w-[1.15rem]" fill="currentColor" viewBox="0 0 24 24">
@@ -35,7 +55,7 @@ export function EditorialFooter() {
             href="https://instagram.com/evostables"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition flex items-center hover:text-black"
+            className={`transition flex items-center ${hoverColor}`}
             aria-label="Follow us on Instagram"
           >
             <svg className="h-4 w-4 md:h-[1.15rem] md:w-[1.15rem]" fill="currentColor" viewBox="0 0 24 24">
@@ -46,7 +66,7 @@ export function EditorialFooter() {
             href="https://www.linkedin.com/in/alex-baddeley/"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition flex items-center hover:text-black"
+            className={`transition flex items-center ${hoverColor}`}
             aria-label="Connect on LinkedIn"
           >
             <svg className="h-4 w-4 md:h-[1.15rem] md:w-[1.15rem]" fill="currentColor" viewBox="0 0 24 24">
@@ -55,7 +75,7 @@ export function EditorialFooter() {
           </a>
           <a
             href="mailto:alex@evolutionstables.nz"
-            className="transition flex items-center hover:text-black"
+            className={`transition flex items-center ${hoverColor}`}
             aria-label="Send us an email"
           >
             <svg className="h-4 w-4 md:h-[1.15rem] md:w-[1.15rem]" fill="currentColor" viewBox="0 0 24 24">

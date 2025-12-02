@@ -60,18 +60,53 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
       }
       .font-sans { font-family: var(--font-sans); }
       .font-serif { font-family: var(--font-serif); }
-      .editorial-headline { font-family: var(--font-serif); }
-      .editorial-subheadline { font-family: var(--font-sans); font-style: italic; color: #4b4b4b; }
-      .editorial-body { font-family: var(--font-sans); }
-      .editorial-quote { font-family: var(--font-sans); }
-      .subheadline {
-        font-style: italic;
+      .editorial-headline { 
+        font-family: var(--font-serif); 
+        font-weight: 700;
+        font-size: clamp(1.875rem, 2vw + 1.5rem, 2.5rem);
+        line-height: 1.2;
+        color: #111111;
+      }
+      .editorial-subheadline { 
+        font-family: var(--font-serif); 
+        font-weight: 500;
+        font-size: clamp(1.25rem, 1.2vw + 1.05rem, 1.75rem);
+        line-height: 1.35;
         color: #4b4b4b;
+      }
+      .editorial-body { 
+        font-family: var(--font-sans); 
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: #111111;
+      }
+      .editorial-quote { 
+        font-family: var(--font-serif); 
+        font-style: italic;
+        font-weight: 600;
+        font-size: clamp(1.125rem, 0.8vw + 1rem, 1.35rem);
+        line-height: 1.4;
+        color: #4b4b4b;
+        text-align: left;
+      }
+      .editorial-caption {
+        font-family: var(--font-sans);
+        font-size: 0.8rem;
+        line-height: 1.4;
+        letter-spacing: 0.06em;
+        color: #6b6b6b;
+      }
+      .subheadline {
+        font-family: var(--font-serif);
+        font-weight: 500;
+        color: #4b4b4b;
+        font-size: clamp(1.25rem, 1.2vw + 1.05rem, 1.75rem);
+        line-height: 1.35;
         margin-bottom: 1.5rem;
       }
       .body-text p {
         font-size: 0.95rem;
-        line-height: 1.75;
+        line-height: 1.7;
         margin-bottom: 1rem;
         color: #111111;
       }
@@ -89,21 +124,26 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
         margin: 1.5rem 0;
       }
       blockquote {
+        font-family: var(--font-serif);
         font-style: italic;
+        font-weight: 600;
+        font-size: clamp(1.125rem, 0.8vw + 1rem, 1.35rem);
+        line-height: 1.4;
         color: #4b4b4b;
         margin-bottom: 0.5rem;
       }
       figcaption {
-        font-size: 0.75rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: #9b9b9b;
+        font-family: var(--font-sans);
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        color: #6b6b6b;
       }
       .image-caption {
-        font-size: 0.7rem;
-        color: #9b9b9b;
+        font-family: var(--font-sans);
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        color: #6b6b6b;
         text-align: center;
-        font-style: italic;
         margin-top: 0.5rem;
       }
       img { max-width: 100%; height: auto; }

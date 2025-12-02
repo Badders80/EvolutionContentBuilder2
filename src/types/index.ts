@@ -27,6 +27,8 @@ export interface ContentData {
   caption: string;
   videoUrl: string;
   rawEmbedHtml: string;
+  horseName: string;
+  raceLocation: string;
 }
 
 export type StructuredFields = ContentData;
@@ -52,6 +54,8 @@ export const initialContent: ContentData = {
   caption: '',
   videoUrl: '',
   rawEmbedHtml: '',
+  horseName: '',
+  raceLocation: '',
 };
 
 export const initialSettings: AppSettings = {

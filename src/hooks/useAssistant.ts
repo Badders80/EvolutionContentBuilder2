@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SYSTEM_PROMPT } from "../utils/systemPrompt";
+import { LAYOUT_PROMPT } from "../utils/layoutPrompt";
+import { EVOLUTION_BRAND_VOICE } from "../prompts/brandVoice";
 
 const API_KEY =
   (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ??
@@ -10,7 +12,7 @@ const API_KEY =
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 export function useAssistant() {
-  const { appendMessage, updateStructuredFields, currentModel } = useAppContext();
+  const { appendMessage, updateStructuredFields, updateSettings, structured, currentModel } = useAppContext();
   const [loading, setLoading] = useState(false);
 
   const runCommand = async (rawInput: string) => {
@@ -35,6 +37,8 @@ export function useAssistant() {
 
       const prompt = `
 ${SYSTEM_PROMPT}
+
+${EVOLUTION_BRAND_VOICE}
 
 ### USER INPUT:
 ${rawInput}
@@ -110,5 +114,83 @@ ${rawInput}
     return true; // Signal success
   };
 
-  return { runCommand, loading };
+  const runLayoutOrchestrator = async (currentLayout: string) => {
+    setLoading(true);
+
+    if (!genAI) {
+      appendMessage({
+        role: "assistant",
+        content: "Missing Gemini API key for Layout Orchestration.",
+      });
+      setLoading(false);
+      return false;
+    }
+
+    try {
+      const inputContent = JSON.stringify(structured, null, 2);
+      const prompt = `
+${LAYOUT_PROMPT}
+
+### CURRENT CONTENT TOKENS:
+${inputContent}
+
+### CURRENT LAYOUT SETTING:
+${currentLayout}
+`;
+
+      appendMessage({
+        role: "system",
+        content: `Running Layout Orchestrator on ${currentModel}...`,
+      });
+
+      const model = genAI.getGenerativeModel({ model: currentModel });
+      const response = await model.generateContent(prompt);
+      const textRaw = response?.response?.text?.() ?? "";
+      
+      let jsonString = textRaw.trim().replace(/```json/g, "").replace(/```/g, "");
+      const firstOpen = jsonString.indexOf("{");
+      const lastClose = jsonString.lastIndexOf("}");
+
+      if (firstOpen !== -1 && lastClose !== -1) {
+        jsonString = jsonString.substring(firstOpen, lastClose + 1);
+      }
+
+      let parsed: any = null;
+
+      try {
+        parsed = JSON.parse(jsonString);
+
+        if (parsed.layoutType) {
+          updateSettings({ layoutType: parsed.layoutType });
+          appendMessage({ 
+            role: "system", 
+            content: `Layout chosen: ${parsed.layoutType.toUpperCase()}. Rationale: ${parsed.rationale}` 
+          });
+        } else {
+          throw new Error("Layout AI did not return a layoutType field.");
+        }
+
+      } catch (e) {
+        console.warn("Layout AI Parse Failed:", e);
+        appendMessage({
+          role: "system",
+          content: `Layout Orchestrator failed. Raw text received: ${textRaw}`,
+        });
+        return false;
+      }
+      
+    } catch (error: any) {
+      console.error("Layout Orchestrator error:", error);
+      appendMessage({
+        role: "system",
+        content: `Error: ${error?.message || "Unknown layout communication error"}`,
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+    return true;
+  };
+
+  return { runCommand, runLayoutOrchestrator, loading };
 }

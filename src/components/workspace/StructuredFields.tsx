@@ -200,11 +200,30 @@ export const StructuredFields: React.FC = () => {
           Video URL (Optional MP4/MOV)
         </label>
         <input
-          className="w-full border rounded px-2 py-1 text-xs"
-          value={structured.videoUrl}
-          onChange={handleChange("videoUrl")}
-          placeholder="Paste a direct link to an MP4 or MOV file"
-        />
+        className="w-full border rounded px-2 py-1 text-xs"
+        value={structured.videoUrl}
+        onChange={handleChange("videoUrl")}
+        placeholder="Paste a direct link to an MP4 or MOV file"
+      />
+    </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-2">
+          <label className="block text-[11px] font-semibold">Horse Name</label>
+          <input
+            className="w-full border rounded px-2 py-1 text-xs"
+            value={structured.horseName}
+            onChange={handleChange("horseName")}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-[11px] font-semibold">Race Location</label>
+          <input
+            className="w-full border rounded px-2 py-1 text-xs"
+            value={structured.raceLocation}
+            onChange={handleChange("raceLocation")}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">

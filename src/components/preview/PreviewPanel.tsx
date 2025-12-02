@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { Monitor, Tablet, Smartphone, FileJson, FileType, Printer } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
-import { determineTemplate } from "../LayoutEngine/layoutRules";
+import type { LayoutType } from "../../types";
+import { determineTemplate } from "../../utils/layoutRules";
 import { VisualTemplate } from "../Templates/VisualTemplate";
 // CHANGE: Import the Output component (The Single Source of Truth)
 import { EditorialOutput } from "../Templates/EditorialOutput";
@@ -12,7 +13,7 @@ export const PreviewPanel: React.FC = () => {
   const { structured, settings, updateSettings } = useAppContext();
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const templateType = determineTemplate(structured.body, settings.layoutType);
+  const resolvedLayout = determineTemplate(structured, settings);
 
   // Function to save build to disk
   const handleSaveToDisk = () => {
@@ -28,7 +29,7 @@ export const PreviewPanel: React.FC = () => {
   };
 
   const renderTemplate = () => {
-    switch (templateType) {
+    switch (resolvedLayout) {
       case 'visual':
         return <VisualTemplate />;
       case 'editorial':
@@ -62,32 +63,48 @@ export const PreviewPanel: React.FC = () => {
             Preview
           </h2>
           <p className="text-[11px] text-slate-500">
-            {templateType.charAt(0).toUpperCase() + templateType.slice(1)} Template
+            {resolvedLayout.charAt(0).toUpperCase() + resolvedLayout.slice(1)} Template
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
-          <button
-            onClick={() => updateSettings({ devicePreview: 'desktop' })}
-            className={`p-1.5 rounded ${settings.devicePreview === 'desktop' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
-            title="Desktop View"
-          >
-            <Monitor size={14} />
-          </button>
-          <button
-            onClick={() => updateSettings({ devicePreview: 'tablet' })}
-            className={`p-1.5 rounded ${settings.devicePreview === 'tablet' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
-            title="Tablet View"
-          >
-            <Tablet size={14} />
-          </button>
-          <button
-            onClick={() => updateSettings({ devicePreview: 'mobile' })}
-            className={`p-1.5 rounded ${settings.devicePreview === 'mobile' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
-            title="Mobile View"
-          >
-            <Smartphone size={14} />
-          </button>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <label className="text-[11px] text-slate-500">Layout</label>
+            <select
+              value={settings.layoutType}
+              onChange={(e) => updateSettings({ layoutType: e.target.value as LayoutType })}
+              className="text-xs border border-es-border rounded px-2 py-1 bg-white text-slate-700"
+            >
+              <option value="auto">Auto</option>
+              <option value="visual">Visual</option>
+              <option value="editorial">Editorial</option>
+              <option value="longform">Longform</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+            <button
+              onClick={() => updateSettings({ devicePreview: 'desktop' })}
+              className={`p-1.5 rounded ${settings.devicePreview === 'desktop' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+              title="Desktop View"
+            >
+              <Monitor size={14} />
+            </button>
+            <button
+              onClick={() => updateSettings({ devicePreview: 'tablet' })}
+              className={`p-1.5 rounded ${settings.devicePreview === 'tablet' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+              title="Tablet View"
+            >
+              <Tablet size={14} />
+            </button>
+            <button
+              onClick={() => updateSettings({ devicePreview: 'mobile' })}
+              className={`p-1.5 rounded ${settings.devicePreview === 'mobile' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+              title="Mobile View"
+            >
+              <Smartphone size={14} />
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">

@@ -4,11 +4,13 @@ import { Composer } from "./Composer";
 
 export const WorkspacePanel: React.FC = () => {
   return (
-    <section className="flex flex-col h-screen bg-slate-50 border-r">
-      <div className="flex-1 overflow-hidden px-4 py-4 space-y-4">
+    <div className="flex h-full flex-col">
+      <div className="flex-1 overflow-y-auto">
         <StructuredFields />
       </div>
-      <Composer />
-    </section>
+      <div className="shrink-0 border-t border-es-border bg-es-surface">
+        <Composer />
+      </div>
+    </div>
   );
 };

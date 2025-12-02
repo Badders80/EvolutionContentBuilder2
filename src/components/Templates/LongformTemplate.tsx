@@ -28,7 +28,7 @@ export function LongformTemplate() {
           {settings.includeImage && (content.imagePreview || content.featuredImageUrl || content.videoUrl || content.rawEmbedHtml) ? (
             <div className="relative h-64 md:h-80 overflow-hidden">
               {content.rawEmbedHtml ? (
-                <RawHtmlEmbed html={content.rawEmbedHtml} />
+                <RawHtmlEmbed html={content.rawEmbedHtml} className="h-full w-full" />
               ) : content.videoUrl ? (
                 <video
                   controls
@@ -46,11 +46,11 @@ export function LongformTemplate() {
 
               {/* Overlay Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-                <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
+                <h1 className="editorial-headline text-white mb-2">
                   {content.headline || 'Your Headline Here'}
                 </h1>
                 {content.subheadline && (
-                  <p className="font-sans italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                  <p className="editorial-subheadline text-white/90 mb-8">
                     {content.subheadline}
                   </p>
                 )}
@@ -58,11 +58,11 @@ export function LongformTemplate() {
             </div>
           ) : (
             <div className="p-6 md:p-8 bg-slate-900 text-white">
-              <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
+              <h1 className="editorial-headline text-white mb-2">
                 {content.headline || 'Your Headline Here'}
               </h1>
               {content.subheadline && (
-                <p className="font-sans italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                <p className="editorial-subheadline text-white/90 mb-8">
                   {content.subheadline}
                 </p>
               )}
@@ -81,7 +81,7 @@ export function LongformTemplate() {
                   paragraphs.slice(0, Math.ceil(paragraphs.length / 2)).map((paragraph, index) => (
                     <p
                       key={index}
-                      className={`mb-6 text-sm md:text-[0.95rem] leading-relaxed ${index === 0
+                      className={`mb-6 ${index === 0
                         ? 'first-letter:text-4xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:mt-1'
                         : ''
                         }`}
@@ -99,11 +99,11 @@ export function LongformTemplate() {
                 {/* Quote Block */}
                 {settings.includeQuote && content.quote && (
                   <figure className="border-l-2 border-es-borderStrong pl-4">
-                    <blockquote className="editorial-quote italic text-sm text-es-textSoft mb-2">
+                    <blockquote className="editorial-quote mb-2">
                       "{content.quote}"
                     </blockquote>
                     {content.quoteAttribution && (
-                      <figcaption className="text-[0.75rem] uppercase tracking-[0.16em] text-es-muted">
+                      <figcaption className="editorial-caption">
                         — {content.quoteAttribution}
                       </figcaption>
                     )}
@@ -113,7 +113,7 @@ export function LongformTemplate() {
                 {/* Remaining paragraphs */}
                 <div className="magazine-body editorial-body text-es-text">
                   {paragraphs.slice(Math.ceil(paragraphs.length / 2)).map((paragraph, index) => (
-                    <p key={index} className="mb-6 text-sm md:text-[0.95rem] leading-relaxed">
+                    <p key={index} className="mb-6">
                       {paragraph}
                     </p>
                   ))}
