@@ -3,7 +3,7 @@ import { Monitor, Tablet, Smartphone } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
 import { determineTemplate } from "../LayoutEngine/layoutRules";
 import { VisualTemplate } from "../Templates/VisualTemplate";
-import { EditorialTemplate } from "../Templates/EditorialTemplate";
+import { EditorialOutput } from "../Templates/EditorialOutput";
 import { LongformTemplate } from "../Templates/LongformTemplate";
 
 export const PreviewPanel: React.FC = () => {
@@ -16,11 +16,11 @@ export const PreviewPanel: React.FC = () => {
       case 'visual':
         return <VisualTemplate />;
       case 'editorial':
-        return <EditorialTemplate />;
+        return <EditorialOutput />;
       case 'longform':
         return <LongformTemplate />;
       default:
-        return <EditorialTemplate />;
+        return <EditorialOutput />;
     }
   };
 
@@ -73,7 +73,7 @@ export const PreviewPanel: React.FC = () => {
       </header>
 
       <div className="flex-1 overflow-y-auto px-3 py-4 flex justify-center bg-slate-100">
-        <div className={`w-full ${getContainerWidth()} bg-white shadow-sm min-h-[800px] transition-all duration-300`}>
+        <div className={`w-full ${getContainerWidth()} bg-white shadow-sm min-h-[800px] transition-all duration-300 pb-20`}>
            {renderTemplate()}
         </div>
       </div>

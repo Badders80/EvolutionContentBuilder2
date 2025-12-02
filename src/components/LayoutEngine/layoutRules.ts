@@ -11,7 +11,7 @@ export function countWords(text: string): number {
 /**
  * Determine the template based on body word count
  * - If body < 140 words → VisualTemplate
- * - If body 140–400 → EditorialTemplate  
+ * - If body 140–400 → Editorial (Output)
  * - If body > 400 → LongformTemplate
  */
 export function determineTemplate(bodyText: string, layoutType: LayoutType): TemplateType {
