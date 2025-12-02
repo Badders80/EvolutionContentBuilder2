@@ -84,12 +84,18 @@ export function EditorialOutput() {
               </figure>
             )}
 
-            {/* Embed or Image with Caption */}
+            {/* Embed, Video, or Image with Caption */}
             {settings.includeImage && (
               <figure className="mt-2 media-box max-w-xs md:max-w-sm w-full mx-auto">
                 <div className="w-full">
                   {content.rawEmbedHtml ? (
                     <RawHtmlEmbed html={content.rawEmbedHtml} />
+                  ) : content.videoUrl ? (
+                    <video
+                      controls
+                      src={content.videoUrl}
+                      className="w-full h-full object-cover rounded shadow-md"
+                    />
                   ) : (
                     <SmartImage
                       src={content.imagePreview || content.featuredImageUrl || ''}

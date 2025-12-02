@@ -1,4 +1,5 @@
 import { SmartImage } from '../SmartImage';
+import { RawHtmlEmbed } from '../RawHtmlEmbed';
 import { useAppContext } from '../../context/AppContext';
 import { EditorialHeader } from '../layout/Header/EditorialHeader';
 import { EditorialFooter } from '../layout/Footer/EditorialFooter';
@@ -24,14 +25,24 @@ export function LongformTemplate() {
 
         {/* Full-width Hero */}
         <header className="relative mb-8">
-          {settings.includeImage && (content.imagePreview || content.featuredImageUrl) ? (
+          {settings.includeImage && (content.imagePreview || content.featuredImageUrl || content.videoUrl || content.rawEmbedHtml) ? (
             <div className="relative h-64 md:h-80 overflow-hidden">
-              <img
-                src={content.imagePreview || content.featuredImageUrl}
-                alt="Featured"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+              {content.rawEmbedHtml ? (
+                <RawHtmlEmbed html={content.rawEmbedHtml} />
+              ) : content.videoUrl ? (
+                <video
+                  controls
+                  src={content.videoUrl}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <img
+                  src={content.imagePreview || content.featuredImageUrl}
+                  alt="Featured"
+                  className="w-full h-full object-cover"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
 
               {/* Overlay Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">

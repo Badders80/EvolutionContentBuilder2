@@ -58,11 +58,17 @@ export function VisualTemplate() {
               </figure>
             )}
 
-            {/* Embed or Smart Image */}
+            {/* Embed, Video, or Smart Image */}
             {settings.includeImage && (
               <div className="media-box max-w-xs md:max-w-sm w-full mx-auto">
                 {content.rawEmbedHtml ? (
                   <RawHtmlEmbed html={content.rawEmbedHtml} />
+                ) : content.videoUrl ? (
+                  <video
+                    controls
+                    src={content.videoUrl}
+                    className="w-full h-full object-cover rounded shadow-md"
+                  />
                 ) : (
                   <SmartImage
                     src={content.imagePreview || content.featuredImageUrl || ''}
