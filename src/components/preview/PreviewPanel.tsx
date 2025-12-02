@@ -3,6 +3,7 @@ import { Monitor, Tablet, Smartphone } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
 import { determineTemplate } from "../LayoutEngine/layoutRules";
 import { VisualTemplate } from "../Templates/VisualTemplate";
+// CHANGE: Import the Output component (The Single Source of Truth)
 import { EditorialOutput } from "../Templates/EditorialOutput";
 import { LongformTemplate } from "../Templates/LongformTemplate";
 
@@ -16,6 +17,8 @@ export const PreviewPanel: React.FC = () => {
       case 'visual':
         return <VisualTemplate />;
       case 'editorial':
+        // CHANGE: Render EditorialOutput. 
+        // Now the preview is 100% identical to the PDF and includes click-to-edit.
         return <EditorialOutput />;
       case 'longform':
         return <LongformTemplate />;

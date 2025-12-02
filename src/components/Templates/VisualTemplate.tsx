@@ -7,25 +7,25 @@ export function VisualTemplate() {
   const { structured: content, settings } = useAppContext();
 
   const isMobile = settings.devicePreview === 'mobile';
-  const gridClass = isMobile 
-    ? 'grid grid-cols-1 gap-6' 
+  const gridClass = isMobile
+    ? 'grid grid-cols-1 gap-6'
     : 'grid grid-cols-2 gap-8';
 
   return (
     <article className="magazine-template min-h-full flex flex-col bg-white font-serif">
       <div className="flex-grow p-6 md:p-8">
         <EditorialHeader />
-        
+
         {/* Header */}
         <header className="mb-8">
-          {content.subheadline && (
-            <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
-              {content.subheadline}
-            </p>
-          )}
-          <h1 className="editorial-headline text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-slate-900 mb-4">
-            {content.headline || 'Your Headline Here'}
-          </h1>
+            <h1 className="editorial-headline text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-slate-900 mb-4">
+              {content.headline || 'Your Headline Here'}
+            </h1>
+            {content.subheadline && (
+              <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                {content.subheadline}
+              </p>
+            )}
         </header>
 
         {/* Responsive Grid: Mobile = 1 col, Tablet/Desktop = 2 col */}

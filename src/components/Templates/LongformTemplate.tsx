@@ -7,8 +7,8 @@ export function LongformTemplate() {
   const { structured: content, settings } = useAppContext();
 
   const isMobile = settings.devicePreview === 'mobile';
-  const gridClass = isMobile 
-    ? 'grid grid-cols-1 gap-6' 
+  const gridClass = isMobile
+    ? 'grid grid-cols-1 gap-6'
     : 'grid grid-cols-2 gap-8';
 
   // Split body into paragraphs
@@ -32,29 +32,29 @@ export function LongformTemplate() {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-              
+
               {/* Overlay Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
+                  <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
+                    {content.headline || 'Your Headline Here'}
+                  </h1>
+                  {content.subheadline && (
+                    <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                      {content.subheadline}
+                    </p>
+                  )}
+              </div>
+            </div>
+          ) : (
+            <div className="p-6 md:p-8 bg-slate-900 text-white">
+                <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
+                  {content.headline || 'Your Headline Here'}
+                </h1>
                 {content.subheadline && (
                   <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
                     {content.subheadline}
                   </p>
                 )}
-                <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
-                  {content.headline || 'Your Headline Here'}
-                </h1>
-              </div>
-            </div>
-          ) : (
-            <div className="p-6 md:p-8 bg-slate-900 text-white">
-              {content.subheadline && (
-                <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
-                  {content.subheadline}
-                </p>
-              )}
-              <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white">
-                {content.headline || 'Your Headline Here'}
-              </h1>
             </div>
           )}
         </header>
@@ -70,11 +70,10 @@ export function LongformTemplate() {
                   paragraphs.slice(0, Math.ceil(paragraphs.length / 2)).map((paragraph, index) => (
                     <p
                       key={index}
-                      className={`mb-6 text-sm md:text-[0.95rem] leading-relaxed ${
-                        index === 0
+                      className={`mb-6 text-sm md:text-[0.95rem] leading-relaxed ${index === 0
                           ? 'first-letter:text-4xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:mt-1'
                           : ''
-                      }`}
+                        }`}
                     >
                       {paragraph}
                     </p>

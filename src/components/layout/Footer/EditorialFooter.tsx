@@ -4,7 +4,7 @@ export function EditorialFooter() {
       <div className="mx-auto flex max-w-4xl flex-col px-8 pt-12 pb-8 md:px-12 md:pt-14 md:pb-10">
         {/* Top Border */}
         <div className="w-full border-t-2 border-black mb-10 md:mb-14"></div>
-        
+
         {/* Hero Tagline - Centerpiece */}
         <div className="flex flex-col items-center justify-center text-center py-10 md:py-14 animate-fade-in">
           <div className="w-full space-y-3">
