@@ -1,26 +1,26 @@
 export function EditorialFooter() {
   return (
     <footer className="relative bg-white overflow-hidden">
-      <div className="mx-auto flex max-w-6xl flex-col px-8 pt-12 pb-8 md:px-16 md:pt-16 md:pb-12">
+      <div className="mx-auto flex max-w-4xl flex-col px-8 pt-12 pb-8 md:px-12 md:pt-14 md:pb-10">
         {/* Top Border */}
-        <div className="w-full max-w-4xl border-t-2 border-black mb-12 md:mb-16 self-center"></div>
+        <div className="w-full border-t-2 border-black mb-10 md:mb-14"></div>
         
         {/* Hero Tagline - Centerpiece */}
-        <div className="flex flex-col items-center justify-center text-center py-12 md:py-16 animate-fade-in">
-          <div className="max-w-4xl space-y-6">
+        <div className="flex flex-col items-center justify-center text-center py-10 md:py-14 animate-fade-in">
+          <div className="w-full space-y-3">
             <div className="flex items-center justify-center">
-              <h2 className="font-serif text-xl md:text-2xl lg:text-3xl font-normal text-black tracking-tight whitespace-nowrap">
+              <h2 className="font-serif text-xl md:text-2xl font-normal text-black tracking-tight whitespace-nowrap">
                 The Future of Ownership Has Arrived
               </h2>
             </div>
-            <p className="text-xs md:text-sm font-light text-gray-500">
+            <p className="text-[0.75rem] md:text-[0.85rem] font-light text-gray-500">
               Digital-Syndication, by Evolution Stables, Powered By Tokinvest
             </p>
           </div>
         </div>
 
         {/* Bottom Border */}
-        <div className="w-full max-w-4xl border-b-2 border-black my-8 self-center"></div>
+        <div className="w-full border-b-2 border-black my-8"></div>
 
         {/* Bottom Section - Footer Bar */}
         <div className="flex flex-col gap-6 text-[10px] md:text-xs text-gray-500 md:flex-row md:justify-between md:items-center">
