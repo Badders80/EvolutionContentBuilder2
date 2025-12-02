@@ -25,6 +25,8 @@ export interface ContentData {
   imageFile: File | null;
   imagePreview: string | null;
   caption: string;
+  videoUrl: string;
+  rawEmbedHtml: string;
 }
 
 export type StructuredFields = ContentData;
@@ -55,6 +57,8 @@ export const initialContent: ContentData = {
   imageFile: null,
   imagePreview: null,
   caption: '',
+  videoUrl: '',
+  rawEmbedHtml: '',
 };
 
 export const initialSettings: AppSettings = {

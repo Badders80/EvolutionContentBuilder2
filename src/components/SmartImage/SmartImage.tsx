@@ -32,7 +32,7 @@ export function SmartImage({ src, alt = '', className = '' }: SmartImageProps) {
   if (!src) {
     return (
       <div className={`bg-es-bgSoft border border-es-border flex items-center justify-center h-48 ${className}`}>
-        <span className="text-es-muted text-sm font-serif italic">Featured Image</span>
+        <span className="text-es-muted text-sm font-sans italic">Featured Image</span>
       </div>
     );
   }

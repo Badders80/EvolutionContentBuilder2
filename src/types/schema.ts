@@ -31,6 +31,8 @@ export const ContentDataSchema = z.object({
   footer: z.string().default(""),
   imageFile: z.custom<File>((v) => v instanceof File).nullable().default(null),
   caption: z.string().default(""),
+  videoUrl: z.string().default(""),
+  rawEmbedHtml: z.string().default(""),
 });
 
 export const AppSettingsSchema = z.object({

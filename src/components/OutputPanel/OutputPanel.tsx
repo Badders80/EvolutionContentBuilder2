@@ -36,7 +36,7 @@ export const OutputPanel = forwardRef<HTMLDivElement, OutputPanelProps>(
                 <EditorialOutput />
               </div>
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-8 font-serif">
+              <div className="h-full flex flex-col items-center justify-center text-center p-8 font-sans">
                 <div className="w-20 h-20 bg-es-border rounded-full flex items-center justify-center mb-6">
                   <Sparkles className="w-10 h-10 text-es-muted" />
                 </div>

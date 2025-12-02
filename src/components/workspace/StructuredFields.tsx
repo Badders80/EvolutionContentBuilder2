@@ -1,4 +1,5 @@
 import React from "react";
+import { PlusCircle } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
 import type { StructuredFields as StructuredFieldsType } from "../../types";
 
@@ -10,6 +11,7 @@ export const StructuredFields: React.FC = () => {
     updateStructuredFields,
     updateSettings,
     saveCurrentBuild,
+    undo,
   } = useAppContext();
 
   const modeOptions = [
@@ -51,13 +53,22 @@ export const StructuredFields: React.FC = () => {
             Refine fields before sending to preview.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => saveCurrentBuild()}
-          className="text-[11px] px-3 py-1 rounded bg-slate-900 text-white hover:bg-slate-800"
-        >
-          Save Build
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => undo()}
+            className="text-[11px] px-3 py-1 rounded border border-slate-300 text-slate-700 hover:bg-slate-50"
+          >
+            Undo
+          </button>
+          <button
+            type="button"
+            onClick={() => saveCurrentBuild()}
+            className="text-[11px] px-3 py-1 rounded bg-slate-900 text-white hover:bg-slate-800"
+          >
+            Save Build
+          </button>
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -163,7 +174,25 @@ export const StructuredFields: React.FC = () => {
             value={structured.caption}
             onChange={handleChange("caption")}
           />
+          <div className="flex items-center gap-2 pt-2 border-t border-dashed">
+            <button
+              type="button"
+              className="text-[10px] flex items-center gap-1 text-slate-500 hover:text-slate-900"
+            >
+              <PlusCircle size={12} /> Add Secondary Image
+            </button>
+          </div>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-[11px] font-semibold">External Embed HTML (Canva, YouTube)</label>
+        <textarea
+          className="w-full border rounded px-2 py-1 text-xs min-h-[80px]"
+          value={structured.rawEmbedHtml}
+          onChange={handleChange("rawEmbedHtml")}
+          placeholder="Paste raw <iframe> or embed code here (like the Canva code). NOTE: This will NOT work in PDFs."
+        />
       </div>
 
       <div className="space-y-2">

@@ -31,7 +31,7 @@ body {
 
 /* Editorial Magazine Styles - Greyscale Premium */
 .editorial-template {
-  @apply font-serif bg-es-bg text-es-text;
+  @apply font-sans bg-es-bg text-es-text;
 }
 
 .editorial-headline {
@@ -39,15 +39,15 @@ body {
 }
 
 .editorial-subheadline {
-  @apply font-serif italic text-es-textSoft text-lg;
+  @apply font-sans italic text-es-textSoft text-lg;
 }
 
 .editorial-body {
-  @apply font-serif text-[1rem] leading-relaxed text-es-text;
+  @apply font-sans text-[1rem] leading-relaxed text-es-text;
 }
 
 .editorial-quote {
-  @apply font-serif italic text-es-textSoft;
+  @apply font-sans italic text-es-textSoft;
 }
 
 .editorial-caption {

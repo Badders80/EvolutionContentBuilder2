@@ -1,6 +1,7 @@
 import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
 import { SmartImage } from '../SmartImage';
+import { RawHtmlEmbed } from '../RawHtmlEmbed';
 import { useAppContext } from '../../context/AppContext';
 
 /**
@@ -15,7 +16,7 @@ export function EditorialOutput() {
 
   return (
     <div className="min-h-full bg-es-bgSoft py-8 md:py-10">
-      <article className="mx-auto max-w-4xl bg-white shadow-sm px-6 md:px-12 lg:px-16 py-8 md:py-10 font-serif">
+      <article className="mx-auto max-w-4xl bg-white shadow-sm px-6 md:px-12 lg:px-16 py-8 md:py-10">
         {/* Header */}
         <EditorialHeader />
         <div className="border-b-2 border-black mt-2 mb-10" />
@@ -35,7 +36,7 @@ export function EditorialOutput() {
             {/* Subheadline / standfirst */}
             {content.subheadline && (
               <p
-                className="font-serif text-es-textSoft text-[1.2rem] leading-relaxed mb-8 cursor-pointer hover:bg-es-bgSoft transition-colors"
+                className="font-sans text-es-textSoft text-[1.2rem] leading-relaxed mb-8 cursor-pointer hover:bg-es-bgSoft transition-colors"
                 onClick={() => setTargetField('subheadline')}
               >
                 {content.subheadline}
@@ -83,13 +84,19 @@ export function EditorialOutput() {
               </figure>
             )}
 
-            {/* Image with Caption */}
+            {/* Embed or Image with Caption */}
             {settings.includeImage && (
-              <figure className="mt-2">
-                <SmartImage
-                  src={content.imagePreview || content.featuredImageUrl || ''}
-                  alt={content.caption || content.headline || 'Featured image'}
-                />
+              <figure className="mt-2 media-box max-w-xs md:max-w-sm w-full mx-auto">
+                <div className="w-full">
+                  {content.rawEmbedHtml ? (
+                    <RawHtmlEmbed html={content.rawEmbedHtml} />
+                  ) : (
+                    <SmartImage
+                      src={content.imagePreview || content.featuredImageUrl || ''}
+                      alt={content.caption || content.headline || 'Featured image'}
+                    />
+                  )}
+                </div>
                 {content.caption && (
                   <figcaption className="mt-2 text-[0.7rem] text-es-muted text-center italic">
                     {content.caption}

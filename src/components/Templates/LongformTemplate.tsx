@@ -15,7 +15,7 @@ export function LongformTemplate() {
   const paragraphs = content.body.split('\n\n').filter(p => p.trim());
 
   return (
-    <article className="magazine-template min-h-full flex flex-col bg-white font-serif">
+    <article className="magazine-template min-h-full flex flex-col bg-white">
       <div className="flex-grow">
         {/* Branding Header - Padded */}
         <div className="px-6 md:px-8 pt-6 md:pt-8">
@@ -35,26 +35,26 @@ export function LongformTemplate() {
 
               {/* Overlay Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-                  <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
-                    {content.headline || 'Your Headline Here'}
-                  </h1>
-                  {content.subheadline && (
-                    <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
-                      {content.subheadline}
-                    </p>
-                  )}
-              </div>
-            </div>
-          ) : (
-            <div className="p-6 md:p-8 bg-slate-900 text-white">
                 <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
                   {content.headline || 'Your Headline Here'}
                 </h1>
                 {content.subheadline && (
-                  <p className="font-serif italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                  <p className="font-sans italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
                     {content.subheadline}
                   </p>
                 )}
+              </div>
+            </div>
+          ) : (
+            <div className="p-6 md:p-8 bg-slate-900 text-white">
+              <h1 className="editorial-headline text-2xl md:text-4xl lg:text-5xl font-semibold tracking-tight leading-tight text-white mb-2">
+                {content.headline || 'Your Headline Here'}
+              </h1>
+              {content.subheadline && (
+                <p className="font-sans italic text-es-textSoft text-[1.2rem] leading-relaxed mb-8">
+                  {content.subheadline}
+                </p>
+              )}
             </div>
           )}
         </header>
@@ -65,14 +65,14 @@ export function LongformTemplate() {
             {/* Two-column grid for desktop, single column for mobile */}
             <div className={gridClass}>
               {/* Left Column: Main body text */}
-              <div className="magazine-body editorial-body font-serif text-es-text">
+              <div className="magazine-body editorial-body text-es-text">
                 {paragraphs.length > 0 ? (
                   paragraphs.slice(0, Math.ceil(paragraphs.length / 2)).map((paragraph, index) => (
                     <p
                       key={index}
                       className={`mb-6 text-sm md:text-[0.95rem] leading-relaxed ${index === 0
-                          ? 'first-letter:text-4xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:mt-1'
-                          : ''
+                        ? 'first-letter:text-4xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:mt-1'
+                        : ''
                         }`}
                     >
                       {paragraph}
@@ -100,7 +100,7 @@ export function LongformTemplate() {
                 )}
 
                 {/* Remaining paragraphs */}
-                <div className="magazine-body editorial-body font-serif text-es-text">
+                <div className="magazine-body editorial-body text-es-text">
                   {paragraphs.slice(Math.ceil(paragraphs.length / 2)).map((paragraph, index) => (
                     <p key={index} className="mb-6 text-sm md:text-[0.95rem] leading-relaxed">
                       {paragraph}
@@ -110,7 +110,9 @@ export function LongformTemplate() {
 
                 {/* Secondary image placement for longform */}
                 {settings.includeImage && !(content.imagePreview || content.featuredImageUrl) && (
-                  <SmartImage src="" alt="Featured" />
+                  <div className="media-box max-w-xs md:max-w-sm w-full mx-auto">
+                    <SmartImage src="" alt="Featured" />
+                  </div>
                 )}
               </div>
             </div>

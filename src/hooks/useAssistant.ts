@@ -10,9 +10,6 @@ const API_KEY =
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 export function useAssistant() {
-  // Note: updateStructuredFields in AppContext takes UpdateStructuredInput which is Partial<StructuredFields>
-  // But in AppContext.tsx it was defined as updateStructuredFields(fields: UpdateStructuredInput)
-  // Let's check AppContext interface again.
   const { appendMessage, updateStructuredFields, currentModel } = useAppContext();
   const [loading, setLoading] = useState(false);
 
@@ -43,70 +40,74 @@ ${SYSTEM_PROMPT}
 ${rawInput}
 `;
 
-      // Use the model selected in the UI/Context
       console.log(`Generating with selected model: ${currentModel}`);
       const model = genAI.getGenerativeModel({ model: currentModel });
       const response = await model.generateContent(prompt);
 
       const textRaw = response?.response?.text?.() ?? "";
-      console.log("Gemini Raw Response:", textRaw); // Debug log
-      const text = textRaw.replace(/```(json)?/gi, "").replace(/```/g, "").trim();
+      console.log("Gemini Raw Response:", textRaw);
 
-      let parsed: {
-        headline: string;
-        subheadline: string;
-        body: string;
-        quote: string;
-        attribution: string;
-        footer: string;
-      } | null = null;
+      // --- CRITICAL SMART PARSER IMPLEMENTATION ---
+      let jsonString = textRaw.trim();
+      
+      // 1. Remove markdown code blocks if present
+      jsonString = jsonString.replace(/```json/g, "").replace(/```/g, "");
 
-      try {
-        parsed = JSON.parse(text);
-        console.log("Parsed JSON:", parsed); // Debug log
-      } catch (e) {
-        console.warn("JSON Parse Failed, falling back to raw text", e);
-        parsed = {
-          headline: "",
-          subheadline: "",
-          body: text,
-          quote: "",
-          attribution: "",
-          footer: "",
-        };
+      // 2. Find the first '{' and the last '}' to safely extract the object
+      const firstOpen = jsonString.indexOf("{");
+      const lastClose = jsonString.lastIndexOf("}");
+
+      if (firstOpen !== -1 && lastClose !== -1) {
+        jsonString = jsonString.substring(firstOpen, lastClose + 1);
       }
 
-      // We need to map the parsed fields to StructuredFields
-      // StructuredFields has featuredImageUrl, parsed doesn't seem to have it in the prompt?
-      // The system prompt says: "If a field is missing in the raw input, leave it as an empty string"
-      // But the system prompt output format doesn't include featuredImageUrl.
-      // I should probably update the system prompt too if I want image support.
-      // For now, I'll just map what we have.
+      let parsed: any = null;
+
+      try {
+        // Attempt to parse the stripped string
+        parsed = JSON.parse(jsonString);
+
+        // Success: Merge new data while preserving existing structured content (like image URLs)
+        updateStructuredFields({
+          headline: parsed?.headline ?? "",
+          subheadline: parsed?.subheadline ?? "",
+          body: parsed?.body ?? "",
+          quote: parsed?.quote ?? "",
+          quoteAttribution: parsed?.attribution ?? "",
+          footer: parsed?.footer ?? "",
+        });
+
+        // Send raw response to log (optional, but helpful for debugging)
+        appendMessage({ role: "assistant", content: textRaw });
+
+      } catch (e) {
+        console.warn("JSON Parse Failed, AI sent conversational filler.", e);
+        
+        // **Failure:** Trigger failure toast and send original raw text to log
+        // Note: The logic for setting the UI toast is handled in the Composer component.
+        appendMessage({
+          role: "assistant",
+          content: `Error: Content could not be structured. Please ask Gemini to regenerate. Raw text received: ${textRaw}`,
+        });
+        
+        // Return false to signal to the Composer that the command failed its quality check
+        return false;
+      }
+      // --- END SMART PARSER ---
       
-      updateStructuredFields({
-        headline: parsed?.headline ?? "",
-        subheadline: parsed?.subheadline ?? "",
-        body: parsed?.body ?? "",
-        quote: parsed?.quote ?? "",
-        quoteAttribution: parsed?.attribution ?? "",
-        footer: parsed?.footer ?? "",
-      });
-
-      appendMessage({
-        role: "assistant",
-        content: text,
-      });
-
     } catch (error: any) {
       console.error("Assistant error:", error);
 
       appendMessage({
         role: "assistant",
-        content: `Error: ${error?.message || "Unknown error"}`,
+        content: `Error: ${error?.message || "Unknown communication error"}`,
       });
+      return false; // Signal failure
     } finally {
       setLoading(false);
     }
+
+    return true; // Signal success
   };
 
   return { runCommand, loading };

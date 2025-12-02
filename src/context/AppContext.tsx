@@ -29,6 +29,7 @@ export interface AppContextValue {
   setStructured: (s: StructuredFields) => void;
   updateStructuredField: (field: keyof StructuredFields, value: string) => void;
   updateStructuredFields: (fields: Partial<StructuredFields>) => void;
+  undo: () => void;
 
   settings: AppSettings;
   updateSettings: (settings: Partial<AppSettings>) => void;
@@ -54,6 +55,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [settings, setSettings] = useState<AppSettings>(initialSettings);
   const [targetField, setTargetField] = useState<AssistantTargetField>("auto");
   const [savedBuilds, setSavedBuilds] = useState<SavedBuild[]>([]);
+  const [, setHistory] = useState<StructuredFields[]>([]);
 
   useEffect(() => {
     try {
@@ -109,6 +111,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const clearMessages = () => setMessages([]);
 
   const updateStructuredField = (field: keyof StructuredFields, value: string) => {
+    setHistory((prev) => [...prev.slice(-10), structured]);
     setStructured((prev) => ({
       ...prev,
       [field]: value,
@@ -116,10 +119,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateStructuredFields = (fields: UpdateStructuredInput) => {
+    setHistory((prev) => [...prev.slice(-10), structured]);
     setStructured((prev) => ({
       ...prev,
       ...fields,
     }));
+  };
+
+  const undo = () => {
+    setHistory((prev) => {
+      if (prev.length === 0) return prev;
+      const previous = prev[prev.length - 1];
+      setStructured(previous);
+      return prev.slice(0, -1);
+    });
   };
 
   const updateSettings = (newSettings: Partial<AppSettings>) => {
@@ -226,6 +239,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setStructured,
       updateStructuredField,
       updateStructuredFields,
+      undo,
       settings,
       updateSettings,
       targetField,

@@ -1,6 +1,6 @@
 /**
  * Generate full HTML magazine export with all styles embedded
- * Uses greyscale Lora-based editorial design
+ * Uses greyscale Inter-based editorial design
  */
 export function exportToHTMLFull(element: HTMLElement | null, filename: string = 'magazine-full'): void {
   if (!element) {
@@ -10,14 +10,19 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
 
   const styles = `
     <style>
+      :root {
+        --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-serif: 'Newsreader', Georgia, serif;
+      }
       * { box-sizing: border-box; margin: 0; padding: 0; }
       body { 
-        font-family: 'Lora', Georgia, serif;
+        font-family: var(--font-sans);
         background: #f5f5f5;
         min-height: 100vh;
         padding: 2rem;
         color: #111111;
       }
+      a { color: inherit; text-decoration: none; }
       article {
         max-width: 900px;
         margin: 0 auto;
@@ -53,6 +58,12 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
         margin-bottom: 0.75rem;
         color: #111111;
       }
+      .font-sans { font-family: var(--font-sans); }
+      .font-serif { font-family: var(--font-serif); }
+      .editorial-headline { font-family: var(--font-serif); }
+      .editorial-subheadline { font-family: var(--font-sans); font-style: italic; color: #4b4b4b; }
+      .editorial-body { font-family: var(--font-sans); }
+      .editorial-quote { font-family: var(--font-sans); }
       .subheadline {
         font-style: italic;
         color: #4b4b4b;
@@ -96,6 +107,46 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
         margin-top: 0.5rem;
       }
       img { max-width: 100%; height: auto; }
+      .media-box {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+      .media-box img,
+      .media-box iframe,
+      .media-box video {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+      }
+      .media-box iframe {
+        width: 100%;
+      }
+      footer {
+        margin-top: 3rem;
+      }
+      .footer-divider { margin: 1.5rem 0; }
+      .footer-divider-top { border-top: 2px solid #111111; }
+      .footer-divider-bottom { border-bottom: 2px solid #111111; }
+      .footer-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        font-size: 0.8rem;
+        color: #4b5563;
+      }
+      .footer-icons {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .footer-icons svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
       footer {
         border-top: 1px solid #e5e5e5;
         padding-top: 1rem;
@@ -113,7 +164,7 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
         h1 { font-size: 1.75rem; }
       }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:wght@400;500;600&display=swap" rel="stylesheet">
   `;
 
   const htmlContent = `
@@ -147,7 +198,11 @@ export function exportToHTMLSlim(element: HTMLElement | null, filename: string =
   // Minimal inline styles - greyscale
   const minimalStyles = `
     <style>
-      body { font-family: 'Lora', Georgia, serif; color: #111; background: #fff; }
+      :root {
+        --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-serif: 'Newsreader', Georgia, serif;
+      }
+      body { font-family: var(--font-sans); color: #111; background: #fff; }
       article { max-width: 700px; margin: 0 auto; padding: 2rem; }
       h1 { font-size: 2rem; font-weight: 600; margin-bottom: 0.75rem; line-height: 1.2; }
       .subheadline { font-style: italic; color: #4b4b4b; margin-bottom: 1.5rem; }
@@ -155,8 +210,25 @@ export function exportToHTMLSlim(element: HTMLElement | null, filename: string =
       blockquote { border-left: 2px solid #111; padding-left: 1rem; font-style: italic; color: #4b4b4b; margin: 1.5rem 0; }
       figcaption { font-size: 0.7rem; color: #9b9b9b; text-align: center; margin-top: 0.5rem; }
       img { max-width: 100%; height: auto; }
+      .font-sans { font-family: var(--font-sans); }
+      .font-serif { font-family: var(--font-serif); }
+      .editorial-headline { font-family: var(--font-serif); }
+      .editorial-subheadline { font-family: var(--font-sans); font-style: italic; color: #4b4b4b; }
+      .editorial-body { font-family: var(--font-sans); }
+      .editorial-quote { font-family: var(--font-sans); }
+      .media-box { max-width: 320px; margin: 0 auto; }
+      .media-box img,
+      .media-box iframe,
+      .media-box video { max-width: 100%; height: auto; display: block; border-radius: 12px; }
+      .media-box iframe { width: 100%; }
+      .footer-divider { margin: 1.5rem 0; }
+      .footer-divider-top { border-top: 2px solid #111; }
+      .footer-divider-bottom { border-bottom: 2px solid #111; }
+      .footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 1.25rem; flex-wrap: wrap; font-size: 0.8rem; color: #4b5563; }
+      .footer-icons { display: flex; align-items: center; gap: 14px; }
+      .footer-icons svg { width: 18px; height: 18px; fill: currentColor; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:wght@400;500;600&display=swap" rel="stylesheet">
   `;
 
   const htmlContent = `
