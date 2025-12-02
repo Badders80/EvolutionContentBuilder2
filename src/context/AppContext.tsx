@@ -13,7 +13,7 @@ import { EMPTY_STRUCTURED, initialSettings } from "../types";
 const STORAGE_KEY_SAVED_BUILDS = "ecb2_saved_builds";
 const STORAGE_KEY_SETTINGS = "ecb2_settings";
 
-export interface AppContextValue {
+interface AppContextValue {
   section: SectionId;
   setSection: (section: SectionId) => void;
 

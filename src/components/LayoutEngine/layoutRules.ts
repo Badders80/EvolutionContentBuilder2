@@ -1,12 +1,9 @@
 import type { TemplateType, LayoutType } from '../../types';
 
-/**
- * Count words in a string
- */
-export function countWords(text: string): number {
+const countWords = (text: string): number => {
   if (!text || !text.trim()) return 0;
   return text.trim().split(/\s+/).filter(word => word.length > 0).length;
-}
+};
 
 /**
  * Determine the template based on body word count
@@ -30,16 +27,4 @@ export function determineTemplate(bodyText: string, layoutType: LayoutType): Tem
   } else {
     return 'longform';
   }
-}
-
-/**
- * Get template display name
- */
-export function getTemplateDisplayName(template: TemplateType): string {
-  const names: Record<TemplateType, string> = {
-    visual: 'Visual Template',
-    editorial: 'Editorial Template',
-    longform: 'Longform Template',
-  };
-  return names[template];
 }

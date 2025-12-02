@@ -1,10 +1,10 @@
-export type ContentMode = 'pre-race' | 'post-race' | 'trainer' | 'investor' | 'social';
+type ContentMode = 'pre-race' | 'post-race' | 'trainer' | 'investor' | 'social';
 
 export type LayoutType = 'auto' | 'visual' | 'editorial' | 'longform';
 
 export type TemplateType = 'visual' | 'editorial' | 'longform';
 
-export type DevicePreview = 'desktop' | 'tablet' | 'mobile';
+type DevicePreview = 'desktop' | 'tablet' | 'mobile';
 
 export type AssistantTargetField =
   | "headline"
@@ -37,13 +37,6 @@ export interface AppSettings {
   includeImage: boolean;
   layoutType: LayoutType;
   devicePreview: DevicePreview;
-}
-
-export interface AppState {
-  content: ContentData;
-  settings: AppSettings;
-  isGenerated: boolean;
-  activeTemplate: TemplateType;
 }
 
 export const initialContent: ContentData = {

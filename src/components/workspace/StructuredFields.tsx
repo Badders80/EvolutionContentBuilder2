@@ -196,6 +196,18 @@ export const StructuredFields: React.FC = () => {
       </div>
 
       <div className="space-y-2">
+        <label className="block text-[11px] font-semibold">
+          Video URL (Optional MP4/MOV)
+        </label>
+        <input
+          className="w-full border rounded px-2 py-1 text-xs"
+          value={structured.videoUrl}
+          onChange={handleChange("videoUrl")}
+          placeholder="Paste a direct link to an MP4 or MOV file"
+        />
+      </div>
+
+      <div className="space-y-2">
         <label className="block text-[11px] font-semibold">Footer</label>
         <input
           className="w-full border rounded px-2 py-1 text-xs"

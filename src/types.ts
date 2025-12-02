@@ -2,7 +2,7 @@ import { initialContent, type ContentData, type AppSettings } from "./types/inde
 
 export type SectionId = "create" | "saved" | "history" | "templates" | "settings";
 
-export type Role = "system" | "user" | "assistant";
+type Role = "system" | "user" | "assistant";
 
 export interface AIMessage {
   id: string;

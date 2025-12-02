@@ -71,3 +71,13 @@ export default defineConfig([
   },
 ])
 ```
+
+## Setup: WSL2 Performance
+
+On Windows, enable the WSL2 antivirus exclusion to avoid severe I/O stalls (multi-minute builds). Add the path below to your AV exclusions:
+
+```
+C:\Program Files\WindowsApps\CanonicalGroupLimited*
+```
+
+After applying the exclusion, run a full build (`npm run build`) to confirm it completes in seconds instead of minutes.
