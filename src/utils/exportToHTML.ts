@@ -122,42 +122,40 @@ export function exportToHTMLFull(element: HTMLElement | null, filename: string =
       .media-box iframe {
         width: 100%;
       }
-      footer {
-        margin-top: 3rem;
-      }
-      .footer-divider { margin: 1.5rem 0; }
-      .footer-divider-top { border-top: 2px solid #111111; }
-      .footer-divider-bottom { border-bottom: 2px solid #111111; }
-      .footer-bar {
+      .footer-shell { background: #ffffff; }
+      .footer-inner {
+        max-width: 64rem;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 3.5rem;
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        gap: 1.25rem;
-        flex-wrap: wrap;
-        font-size: 0.8rem;
+        justify-content: space-between;
         color: #4b5563;
+        border-top: 2px solid #000;
+      }
+      @media (min-width: 768px) {
+        .footer-inner { padding: 2rem 3rem 3.5rem; }
+      }
+      .footer-logo svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        fill: currentColor;
       }
       .footer-icons {
         display: flex;
         align-items: center;
         gap: 14px;
+        color: inherit;
       }
       .footer-icons svg {
-        width: 18px;
-        height: 18px;
+        width: 1rem;
+        height: 1rem;
         fill: currentColor;
       }
-      footer {
-        border-top: 1px solid #e5e5e5;
-        padding-top: 1rem;
-        margin-top: 3rem;
-        font-size: 0.7rem;
-        color: #9b9b9b;
-      }
-      .footer-tagline {
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        font-weight: 500;
+      @media (min-width: 768px) {
+        .footer-logo svg { width: 1.2rem; height: 1.2rem; }
+        .footer-icons svg { width: 1.15rem; height: 1.15rem; }
       }
       @media (max-width: 768px) {
         article { padding: 1.5rem; }
@@ -221,12 +219,16 @@ export function exportToHTMLSlim(element: HTMLElement | null, filename: string =
       .media-box iframe,
       .media-box video { max-width: 100%; height: auto; display: block; border-radius: 12px; }
       .media-box iframe { width: 100%; }
-      .footer-divider { margin: 1.5rem 0; }
-      .footer-divider-top { border-top: 2px solid #111; }
-      .footer-divider-bottom { border-bottom: 2px solid #111; }
-      .footer-bar { display: flex; justify-content: space-between; align-items: center; gap: 1.25rem; flex-wrap: wrap; font-size: 0.8rem; color: #4b5563; }
-      .footer-icons { display: flex; align-items: center; gap: 14px; }
-      .footer-icons svg { width: 18px; height: 18px; fill: currentColor; }
+      .footer-shell { background: #fff; }
+      .footer-inner { max-width: 64rem; width: 100%; margin: 0 auto; padding: 2rem 1.5rem 3.5rem; display: flex; align-items: center; justify-content: space-between; color: #4b5563; border-top: 2px solid #000; }
+      .footer-logo svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
+      .footer-icons { display: flex; align-items: center; gap: 14px; color: inherit; }
+      .footer-icons svg { width: 1rem; height: 1rem; fill: currentColor; }
+      @media (min-width: 768px) {
+        .footer-inner { padding: 2rem 3rem 3.5rem; }
+        .footer-logo svg { width: 1.2rem; height: 1.2rem; }
+        .footer-icons svg { width: 1.15rem; height: 1.15rem; }
+      }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:wght@400;500;600&display=swap" rel="stylesheet">
   `;
