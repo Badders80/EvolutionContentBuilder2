@@ -12,7 +12,7 @@ const EvolutionLogo = () => (
 export function EditorialFooter() {
   return (
     <footer className="relative bg-white overflow-hidden footer-shell">
-      <div className="footer-inner mx-auto flex max-w-4xl w-full items-center justify-between px-6 pt-8 pb-14 md:px-12 border-t-2 border-black text-gray-500">
+      <div className="footer-inner mx-auto flex max-w-4xl w-full items-end justify-between px-6 pt-12 pb-6 md:px-12 border-t-2 border-black text-gray-500 min-h-[120px]">
         <div className="footer-logo flex items-center">
           <span aria-label="Evolution Stables">
             <EvolutionLogo />

@@ -2,6 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useAppContext } from '../../context/AppContext';
 
+// Prefer stable, non-preview models first to avoid transient 500s.
+const MODEL_PRIORITY = [
+  'gemini-3.0-pro',
+  'gemini-2.5-pro',
+  'gemini-2.5-flash',
+  'gemini-2.0-pro',
+  'gemini-2.0-flash',
+  'gemini-1.5-pro',
+  'gemini-1.5-flash',
+];
+
+const sortModelsByStability = (models: string[]) => {
+  const score = (name: string) => {
+    const idx = MODEL_PRIORITY.findIndex((p) => name.startsWith(p));
+    const base = idx === -1 ? MODEL_PRIORITY.length + 1 : idx;
+    const isPreview = name.toLowerCase().includes('preview');
+    return base * 2 + (isPreview ? 1 : 0);
+  };
+  return [...models].sort((a, b) => score(a) - score(b));
+};
+
+const getPreferredModel = (models: string[]) => {
+  const ordered = sortModelsByStability(models);
+  return ordered[0] ?? null;
+};
+
 export const HealthBadge: React.FC = () => {
   const { setCurrentModel, currentModel } = useAppContext();
   const [status, setStatus] = useState<'checking' | 'connected' | 'error'>('checking');
@@ -27,30 +53,56 @@ export const HealthBadge: React.FC = () => {
         }
 
         const listData = await listResp.json();
-        const models = (listData.models || [])
+        const rawModels = (listData.models || [])
           .map((m: any) => m.name.replace('models/', ''))
           .filter((n: string) => n.includes('gemini'));
-        
-        setAvailableModels(models);
-        console.log("✅ AVAILABLE GEMINI MODELS:", models);
 
-        // 2. If our current model isn't in the list, switch to the first available one
-        if (models.length > 0 && !models.includes(currentModel)) {
-          // Prefer 1.5-flash or 1.5-pro if available
-          const preferred = models.find((m: string) => m.includes('1.5-flash')) || 
-                            models.find((m: string) => m.includes('1.5-pro')) || 
-                            models[0];
-          console.log(`Switching model from ${currentModel} to ${preferred}`);
+        const models = sortModelsByStability(rawModels);
+        setAvailableModels(models);
+        console.log("✅ AVAILABLE GEMINI MODELS (sorted):", models);
+
+        // 2. Pick a stable preferred model if needed
+        const preferred = getPreferredModel(models);
+        let selectedModel = currentModel;
+
+        if (preferred && (!models.includes(currentModel))) {
+          console.log(`Switching model from ${currentModel} to ${preferred} (not in available list)`);
+          selectedModel = preferred;
           setCurrentModel(preferred);
         }
 
         // 3. Test connection with the (potentially new) current model
         const genAI = new GoogleGenerativeAI(apiKey);
-        const modelName = models.includes(currentModel) ? currentModel : models[0];
-        const model = genAI.getGenerativeModel({ model: modelName });
-        
-        await model.generateContent("ping");
+        const orderedCandidates = selectedModel
+          ? [selectedModel, ...models.filter((m: string) => m !== selectedModel)]
+          : models;
+
+        let healthyModel: string | null = null;
+        let lastError: any = null;
+
+        for (const candidate of orderedCandidates) {
+          try {
+            const model = genAI.getGenerativeModel({ model: candidate });
+            await model.generateContent("ping");
+            healthyModel = candidate;
+            break;
+          } catch (err) {
+            lastError = err;
+            console.warn(`Health check failed for model ${candidate}`, err);
+          }
+        }
+
+        if (!healthyModel) {
+          throw lastError || new Error('No healthy model found');
+        }
+
+        if (healthyModel !== currentModel) {
+          console.log(`Auto-switching to healthy model: ${healthyModel}`);
+          setCurrentModel(healthyModel);
+        }
+
         setStatus('connected');
+        setErrorMsg('');
       } catch (err: any) {
         console.error("Gemini Health Check Failed:", err);
         setStatus('error');
