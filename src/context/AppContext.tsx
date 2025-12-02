@@ -11,6 +11,7 @@ import type { AIMessage, SavedBuild, SectionId, StructuredFields, AppSettings, A
 import { EMPTY_STRUCTURED, initialSettings } from "../types";
 
 const STORAGE_KEY_SAVED_BUILDS = "ecb2_saved_builds";
+const STORAGE_KEY_SETTINGS = "ecb2_settings";
 
 export interface AppContextValue {
   section: SectionId;
@@ -68,11 +69,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     try {
+      const raw = window.localStorage.getItem(STORAGE_KEY_SETTINGS);
+      if (raw) {
+        const parsed: Partial<AppSettings> = JSON.parse(raw);
+        setSettings((prev) => ({ ...prev, ...parsed }));
+      }
+    } catch (err) {
+      console.error("Failed to load settings", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
       window.localStorage.setItem(STORAGE_KEY_SAVED_BUILDS, JSON.stringify(savedBuilds));
     } catch (err) {
       console.error("Failed to persist saved builds", err);
     }
   }, [savedBuilds]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(settings));
+    } catch (err) {
+      console.error("Failed to persist settings", err);
+    }
+  }, [settings]);
 
   const appendMessage = (msg: Omit<AIMessage, "id" | "createdAt">) => {
     setMessages((prev) => [
