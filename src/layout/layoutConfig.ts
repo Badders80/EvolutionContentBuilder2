@@ -5,10 +5,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getBodyLayoutClasses(_config: LayoutConfig): string {
   // Outer page body container only:
-  // - max width
-  // - horizontal + vertical padding
+  // - max width (match header/footer)
+  // - horizontal + vertical padding (match header/footer)
   // - alignment (centering)
-  const maxWidth = "max-w-3xl";
+  const maxWidth = "max-w-4xl";
   const padding = "px-6 md:px-8 py-10 md:py-12";
   const alignment = "mx-auto";
   return `${alignment} ${maxWidth} ${padding}`;
@@ -120,8 +120,8 @@ export function getEmbedCardClasses(config: LayoutConfig): string {
   if (config.embedStyle === "inlineThumbnail") {
     return "relative w-full max-w-md rounded-lg border border-slate-200 bg-slate-50 p-3";
   }
-  // default full height card (no flex-1)
-  return "relative w-full max-h-[480px] rounded-xl border border-slate-200 bg-slate-50 p-4";
+  // default full height card: fixed height, no flex-1, no absolute
+  return "relative w-full h-64 md:h-80 rounded-xl border border-slate-200 bg-slate-50 p-4 overflow-hidden";
 }
 
 /** Helpers for header/footer padding so all variants are centralised. */

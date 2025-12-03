@@ -18,7 +18,7 @@ export function useAssistant() {
 
   const runCommand = async (rawInput: string) => {
     if (!rawInput || rawInput.trim() === "") return;
-    
+
     setLoading(true);
 
     if (!genAI) {
@@ -54,7 +54,7 @@ ${rawInput}
 
       // --- CRITICAL SMART PARSER IMPLEMENTATION ---
       let jsonString = textRaw.trim();
-      
+
       // 1. Remove markdown code blocks if present
       jsonString = jsonString.replace(/```json/g, "").replace(/```/g, "");
 
@@ -96,19 +96,19 @@ ${rawInput}
 
       } catch (e) {
         console.warn("JSON Parse Failed, AI sent conversational filler.", e);
-        
+
         // **Failure:** Trigger failure toast and send original raw text to log
         // Note: The logic for setting the UI toast is handled in the Composer component.
         appendMessage({
           role: "assistant",
           content: `Error: Content could not be structured. Please ask Gemini to regenerate. Raw text received: ${textRaw}`,
         });
-        
+
         // Return false to signal to the Composer that the command failed its quality check
         return false;
       }
       // --- END SMART PARSER ---
-      
+
     } catch (error: any) {
       console.error("Assistant error:", error);
 
@@ -156,7 +156,7 @@ ${currentLayout}
       const model = genAI.getGenerativeModel({ model: currentModel });
       const response = await model.generateContent(prompt);
       const textRaw = response?.response?.text?.() ?? "";
-      
+
       let jsonString = textRaw.trim().replace(/```json/g, "").replace(/```/g, "");
       const firstOpen = jsonString.indexOf("{");
       const lastClose = jsonString.lastIndexOf("}");
@@ -172,9 +172,9 @@ ${currentLayout}
 
         if (parsed.layoutType) {
           updateSettings({ layoutType: parsed.layoutType });
-          appendMessage({ 
-            role: "system", 
-            content: `Layout chosen: ${parsed.layoutType.toUpperCase()}. Rationale: ${parsed.rationale}` 
+          appendMessage({
+            role: "system",
+            content: `Layout chosen: ${parsed.layoutType.toUpperCase()}. Rationale: ${parsed.rationale}`
           });
         } else {
           throw new Error("Layout AI did not return a layoutType field.");
@@ -188,7 +188,7 @@ ${currentLayout}
         });
         return false;
       }
-      
+
     } catch (error: any) {
       console.error("Layout Orchestrator error:", error);
       appendMessage({

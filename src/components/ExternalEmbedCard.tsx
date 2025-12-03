@@ -15,13 +15,11 @@ export const ExternalEmbedCard: React.FC<ExternalEmbedCardProps> = ({
 
   return (
     <div className={getEmbedCardClasses(layoutConfig)} aria-label={title}>
-      <div className="absolute inset-0 m-3 rounded-lg overflow-hidden bg-black/90">
-        { }
-        <div
-          className="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 [&>img]:w-full [&>img]:h-full [&>img]:object-cover"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      </div>
+      { }
+      <div
+        className="w-full h-full bg-black/90 rounded-lg overflow-hidden [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 [&>img]:w-full [&>img]:h-full [&>img]:object-cover"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   );
 };
