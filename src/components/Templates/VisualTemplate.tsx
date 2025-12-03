@@ -15,18 +15,11 @@ export function VisualTemplate() {
   return (
     <article className="magazine-template min-h-full flex flex-col bg-white">
       <div className="flex-grow p-6 md:p-8">
-        <EditorialHeader />
+        <EditorialHeader content={content} variant="light" />
 
         {/* Header */}
         <header className="mb-8">
-          <h1 className="editorial-headline mb-4">
-            {content.headline || 'Your Headline Here'}
-          </h1>
-          {content.subheadline && (
-            <p className="editorial-subheadline mb-8">
-              {content.subheadline}
-            </p>
-          )}
+          {/* Headline/Subheadline now handled by header */}
         </header>
 
         {/* Responsive Grid: Mobile = 1 col, Tablet/Desktop = 2 col */}

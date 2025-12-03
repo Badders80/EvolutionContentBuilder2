@@ -20,7 +20,7 @@ export function LongformTemplate() {
       <div className="flex-grow">
         {/* Branding Header - Padded */}
         <div className="px-6 md:px-8 pt-6 md:pt-8">
-          <EditorialHeader />
+          <EditorialHeader content={content} variant="light" />
         </div>
 
         {/* Full-width Hero */}

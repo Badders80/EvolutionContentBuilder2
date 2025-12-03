@@ -9,26 +9,15 @@ const EvolutionLogo = () => (
   </svg>
 );
 
-type Variant = 'default' | 'dark';
-
 export function EditorialFooter({
-  variant = 'default',
   className = '',
 }: {
-  variant?: Variant;
   className?: string;
 }) {
-  const isDark = variant === 'dark';
-
-  const containerClass = isDark
-    ? `relative overflow-hidden footer-shell bg-es-text text-es-textSoft ${className}`
-    : `relative bg-white overflow-hidden footer-shell ${className}`;
-
-  const innerClass = isDark
-    ? 'footer-inner mx-auto flex max-w-4xl w-full items-end justify-between px-6 pt-10 pb-4 md:px-12 text-es-textSoft min-h-[120px]'
-    : 'footer-inner mx-auto flex max-w-4xl w-full items-end justify-between px-6 pt-12 pb-6 md:px-12 border-t-2 border-black text-gray-500 min-h-[120px]';
-
-  const hoverColor = isDark ? 'hover:text-white' : 'hover:text-black';
+  const containerClass = `relative overflow-hidden footer-shell bg-es-text text-es-textSoft ${className}`;
+  const innerClass =
+    'footer-inner flex w-full items-end justify-between gap-4 px-4 pt-6 pb-4 text-es-textSoft/90 md:px-6 min-h-[100px]';
+  const hoverColor = 'hover:text-es-bg';
 
   return (
     <footer className={containerClass}>
