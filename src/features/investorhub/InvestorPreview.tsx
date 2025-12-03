@@ -1,3 +1,5 @@
+import EvolutionWatermark from "../../assets/Evolution-Watermark-Black.svg";
+import EvolutionWatermarkOneLine from "../../assets/Evolution-Watermark-OneLine-Black.svg";
 // Card class for pull-quote
 const quoteCardClass = "bg-white rounded-xl p-6 shadow-sm";
 // Evolution Gold color token
@@ -26,7 +28,6 @@ export interface PreviewMedia {
 interface InvestorPreviewProps {
   doc: ContentDocument;
   media?: PreviewMedia;
-  logo?: React.ReactNode;
 }
 
 const CONTENT_LABELS: Record<string, string> = {
@@ -36,7 +37,7 @@ const CONTENT_LABELS: Record<string, string> = {
   trainer_update: "TRAINER UPDATE"
 };
 
-export function InvestorPreview({ doc, media, logo }: InvestorPreviewProps) {
+export function InvestorPreview({ doc, media }: InvestorPreviewProps) {
   const [darkHero, setDarkHero] = useState(false);
 
   // Attribution logic
@@ -76,8 +77,12 @@ export function InvestorPreview({ doc, media, logo }: InvestorPreviewProps) {
       </div>
       {/* Header bar */}
       <header className={headerClass}>
-        <div className="flex items-center gap-2">
-          {logo || <span className="text-sm font-medium tracking-wide">Evolution Stables</span>}
+        <div className="flex items-center gap-3">
+          <img
+            src={EvolutionWatermark}
+            alt="Evolution Stables"
+            className="h-6 w-auto"
+          />
         </div>
         <span className="text-[11px] tracking-[0.2em] uppercase text-neutral-500">
           {CONTENT_LABELS[doc.content_type] || "UPDATE"}
@@ -141,12 +146,11 @@ export function InvestorPreview({ doc, media, logo }: InvestorPreviewProps) {
       {/* Footer band (only for darkHero) */}
       {darkHero && (
         <div className="w-full rounded-xl bg-neutral-950 px-6 py-5 flex items-center justify-between mt-12">
-          {/* Left: Evolution mark + label */}
-          <div className="flex items-center gap-2">
-            <HouseIcon className="h-5 w-5 text-ownership-gold" />
-            <span className="text-xs font-medium tracking-[0.18em] uppercase text-neutral-500">Evolution Stables</span>
-          </div>
-          {/* Right: social/action icons */}
+          <img
+            src={EvolutionWatermarkOneLine}
+            alt="Evolution Stables"
+            className="h-5 w-auto opacity-80"
+          />
           <div className="flex items-center gap-4 text-neutral-600">
             <button className="text-ownership-gold hover:text-ownership-gold" aria-label="Evolution Stables"><HouseIcon className="h-5 w-5" /></button>
             <button className="hover:text-ownership-gold" aria-label="X"><XIcon className="h-5 w-5" /></button>
