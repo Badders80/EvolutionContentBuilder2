@@ -8,7 +8,11 @@ import { LongformTemplate } from "../Templates/LongformTemplate";
 import { exportToPDF, exportToHTMLFull } from "../../utils";
 import { runLayoutTweaks, runOptimise } from "../../hooks/layoutAI";
 
-export const PreviewPanel: React.FC = () => {
+interface PreviewPanelProps {
+  isExport?: boolean;
+}
+
+export const PreviewPanel: React.FC<PreviewPanelProps> = ({ isExport }) => {
   const {
     structured,
     settings,
@@ -177,31 +181,33 @@ export const PreviewPanel: React.FC = () => {
       <div className="flex-1 overflow-y-auto px-3 py-4 flex justify-center bg-slate-100">
         <div ref={contentRef} className={`w-full ${getContainerWidth()} bg-white shadow-sm min-h-[800px] transition-all duration-300 pb-20`}>
           {renderTemplate()}
-          <section className="mt-6 border-t border-slate-200 bg-slate-50 px-4 py-3">
-            <h3 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-500">
-              Smart layout editor
-            </h3>
-            <p className="mt-1 text-[11px] text-slate-500">
-              Describe how the layout should change. This will only adjust layout flags, not rewrite your copy.
-            </p>
-            <textarea
-              className="mt-2 w-full resize-none rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 outline-none focus:border-slate-400"
-              rows={3}
-              value={layoutRequest}
-              onChange={(e) => setLayoutRequest(e.target.value)}
-              placeholder="e.g. Make it a single column and move the quote to the left, under the headline."
-            />
-            <div className="mt-2 flex justify-end">
-              <button
-                type="button"
-                onClick={handleApplyLayoutChange}
-                className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60"
-                disabled={isApplyingLayout}
-              >
-                {isApplyingLayout ? "Applying…" : "Apply layout change"}
-              </button>
-            </div>
-          </section>
+          {!isExport && (
+            <section className="mt-6 border-t border-slate-200 bg-slate-50 px-4 py-3">
+              <h3 className="text-xs font-semibold tracking-[0.16em] uppercase text-slate-500">
+                Smart layout editor
+              </h3>
+              <p className="mt-1 text-[11px] text-slate-500">
+                Describe how the layout should change. This will only adjust layout flags, not rewrite your copy.
+              </p>
+              <textarea
+                className="mt-2 w-full resize-none rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-800 outline-none focus:border-slate-400"
+                rows={3}
+                value={layoutRequest}
+                onChange={(e) => setLayoutRequest(e.target.value)}
+                placeholder="e.g. Make it a single column and move the quote to the left, under the headline."
+              />
+              <div className="mt-2 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleApplyLayoutChange}
+                  className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60"
+                  disabled={isApplyingLayout}
+                >
+                  {isApplyingLayout ? "Applying…" : "Apply layout change"}
+                </button>
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </section>

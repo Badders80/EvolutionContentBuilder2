@@ -4,13 +4,17 @@ import { RawHtmlEmbed } from '../RawHtmlEmbed';
 import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
 import type { StructuredFields } from '../../types';
+import { getBodyLayoutClasses } from '../../layout/layoutConfig';
+
+import type { LayoutConfig } from '../../layout/layoutConfig';
 
 interface VisualTemplateProps {
   structured: StructuredFields;
+  layoutConfig: LayoutConfig;
   settings: { includeQuote: boolean; includeImage: boolean; devicePreview: string };
 }
 
-export function VisualTemplate({ structured: content, settings }: VisualTemplateProps) {
+export function VisualTemplate({ structured: content, layoutConfig, settings }: VisualTemplateProps) {
   const isMobile = settings.devicePreview === 'mobile';
   const gridClass = isMobile
     ? 'grid grid-cols-1 gap-6'
@@ -18,7 +22,7 @@ export function VisualTemplate({ structured: content, settings }: VisualTemplate
 
   return (
     <article className="magazine-template min-h-full flex flex-col bg-white">
-      <div className="flex-grow p-6 md:p-8">
+      <div className={getBodyLayoutClasses(layoutConfig)}>
         <EditorialHeader />
 
         {/* Header */}

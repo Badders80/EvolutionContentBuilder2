@@ -1,35 +1,56 @@
-export function getRightColumnClasses(): string {
+/**
+ * Returns classes for the outer body container (max width, padding, alignment).
+ * Does NOT handle columns or grid.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getBodyLayoutClasses(_config: LayoutConfig): string {
+  // Outer page body container only:
+  // - max width
+  // - horizontal + vertical padding
+  // - alignment (centering)
+  const maxWidth = "max-w-3xl";
+  const padding = "px-6 md:px-8 py-10 md:py-12";
+  const alignment = "mx-auto";
+  return `${alignment} ${maxWidth} ${padding}`;
+}
+//
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getRightColumnClasses(_config: LayoutConfig): string {
   // right column: flex, gap, responsive spacing
   return "flex flex-col gap-6";
 }
 
-export function getPullQuoteClasses(): string {
+//
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getPullQuoteClasses(_config: LayoutConfig): string {
   // pull-quote: centered, tight, responsive
   return "cursor-pointer text-center";
 }
 /** Tokenised Tailwind helpers for layout areas */
 export function getFooterClasses(config: LayoutConfig): string {
   // width: locked token
-  const width = "w-full"; // or "w-full max-w-4xl mx-auto"
+  const width = "w-full max-w-4xl mx-auto";
   // height: driven by footerEmphasis
   const padding =
     config.footerEmphasis === "standard"
-      ? "px-5 py-36"
-      : "px-4 py-27";
+      ? "px-6 md:px-8 py-36"
+      : "px-6 md:px-8 py-27";
   return `${width} ${padding}`;
 }
 
 export function getHeaderClasses(config: LayoutConfig): string {
   // width: locked token
-  const width = "w-full";
+  const width = "w-full max-w-4xl mx-auto";
   // padding: driven by headerStyle
-  let padding = "px-5 py-4";
-  if (config.headerStyle === "compact") padding = "px-4 py-3";
-  if (config.headerStyle === "hero") padding = "px-6 py-6";
+  let padding = "px-6 md:px-8 py-4";
+  if (config.headerStyle === "compact") padding = "px-6 md:px-8 py-3";
+  if (config.headerStyle === "hero") padding = "px-6 md:px-8 py-6";
   return `${width} ${padding}`;
 }
 
-export function getBodyColumnClasses(): string {
+//
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function getBodyColumnClasses(_config: LayoutConfig): string {
   // width: locked token
   return "editorial-body cursor-pointer space-y-4 text-sm leading-relaxed md:text-base";
 }
@@ -99,8 +120,8 @@ export function getEmbedCardClasses(config: LayoutConfig): string {
   if (config.embedStyle === "inlineThumbnail") {
     return "relative w-full max-w-md rounded-lg border border-slate-200 bg-slate-50 p-3";
   }
-  // default full height card
-  return "flex-1 relative w-full max-h-[480px] rounded-xl border border-slate-200 bg-slate-50 p-4";
+  // default full height card (no flex-1)
+  return "relative w-full max-h-[480px] rounded-xl border border-slate-200 bg-slate-50 p-4";
 }
 
 /** Helpers for header/footer padding so all variants are centralised. */

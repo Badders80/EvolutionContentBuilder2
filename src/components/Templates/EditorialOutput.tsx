@@ -1,18 +1,21 @@
-
 import { EditorialHeader } from "../layout/Header";
 import { EditorialFooter } from "../layout/Footer";
 import { SmartImage } from "../SmartImage";
 import { ExternalEmbedCard } from "../ExternalEmbedCard";
-import { getBodyColumnClasses } from "../../layout/layoutConfig";
+import { getBodyColumnClasses, getBodyLayoutClasses } from "../../layout/layoutConfig";
 import { getRightColumnClasses, getPullQuoteClasses } from "../../layout/layoutConfig";
 import type { StructuredFields } from "../../types";
 
+import type { LayoutConfig } from "../../layout/layoutConfig";
+import { RawHtmlEmbed } from "../RawHtmlEmbed";
+
 interface EditorialOutputProps {
   structured: StructuredFields;
+  layoutConfig: LayoutConfig;
   settings: { includeQuote: boolean; includeImage: boolean };
 }
 
-export function EditorialOutput({ structured: content, settings }: EditorialOutputProps) {
+export function EditorialOutput({ structured: content, layoutConfig, settings }: EditorialOutputProps) {
   // setTargetField is not available here; click-to-edit is not supported in props-only mode
   const paragraphs = content.body
     ? content.body.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
@@ -20,12 +23,12 @@ export function EditorialOutput({ structured: content, settings }: EditorialOutp
 
   return (
     <div className="bg-es-bg text-es-text">
-      <div className="mx-auto max-w-[800px] px-6 py-10 md:py-12">
+      <div className={getBodyLayoutClasses(layoutConfig)}>
         <EditorialHeader />
 
         <div className="grid gap-10 md:grid-cols-2">
           {/* Left column: body */}
-          <div className={getBodyColumnClasses()}>
+          <div className={getBodyColumnClasses(layoutConfig)}>
             {paragraphs.length > 0 ? (
               paragraphs.map((para, idx) => <p key={idx}>{para}</p>)
             ) : (
@@ -36,10 +39,10 @@ export function EditorialOutput({ structured: content, settings }: EditorialOutp
           </div>
 
           {/* Right column: quote + media */}
-          <div className={getRightColumnClasses()}>
+          <div className={getRightColumnClasses(layoutConfig)}>
             {/* Quote */}
             {settings.includeQuote && content.quote && (
-              <div className={getPullQuoteClasses()}>
+              <div className={getPullQuoteClasses(layoutConfig)}>
                 <p className="font-serif italic text-xl md:text-2xl leading-snug text-es-text">
                   <span className="align-top text-3xl md:text-4xl text-es-text">“</span>
                   <span className="ml-1">{content.quote}</span>
@@ -52,38 +55,28 @@ export function EditorialOutput({ structured: content, settings }: EditorialOutp
                 )}
               </div>
             )}
-
             {/* Image / video block */}
             {settings.includeImage &&
-              (content.featuredImageUrl ||
-                content.imagePreview ||
-                content.videoUrl) && (
-                <div className="my-8 md:my-10">
-                  <div className="mx-auto w-full max-w-lg md:max-w-xl">
-                    {content.imagePreview || content.featuredImageUrl ? (
-                      <SmartImage
-                          src={content.imagePreview || content.featuredImageUrl}
-                          alt={content.caption || content.headline || ""}
-                          className="w-full rounded-lg object-cover"
-                        />
-                    ) : null}
-
-                    {content.videoUrl &&
-                      !content.imagePreview &&
-                      !content.featuredImageUrl && (
-                        <div className="mt-4 w-full overflow-hidden rounded-lg aspect-video">
-                          <iframe
-                            src={content.videoUrl}
-                            className="h-full w-full"
-                            title={content.headline || "Embedded video"}
-                            allowFullScreen
-                          />
-                        </div>
-                      )}
-                  </div>
+              (content.imagePreview || content.featuredImageUrl || content.videoUrl || content.rawEmbedHtml) && (
+                <div className="relative h-64 md:h-80 overflow-hidden">
+                  {content.rawEmbedHtml ? (
+                    <RawHtmlEmbed html={content.rawEmbedHtml} className="h-full w-full" />
+                  ) : content.videoUrl ? (
+                    <video
+                      controls
+                      src={content.videoUrl}
+                      className="h-full w-full"
+                      title={content.headline || "Embedded video"}
+                    />
+                  ) : (
+                    <SmartImage
+                      src={content.imagePreview || content.featuredImageUrl}
+                      alt={content.headline || "Article image"}
+                      className="h-full w-full object-cover rounded-lg"
+                    />
+                  )}
                 </div>
               )}
-
             {/* External embed block */}
             {content.externalEmbedHtml && (
               <ExternalEmbedCard

@@ -16,7 +16,7 @@ export const ExternalEmbedCard: React.FC<ExternalEmbedCardProps> = ({
   return (
     <div className={getEmbedCardClasses(layoutConfig)} aria-label={title}>
       <div className="absolute inset-0 m-3 rounded-lg overflow-hidden bg-black/90">
-        {/* eslint-disable-next-line react/no-danger */}
+        { }
         <div
           className="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0 [&>img]:w-full [&>img]:h-full [&>img]:object-cover"
           dangerouslySetInnerHTML={{ __html: html }}

@@ -3,13 +3,17 @@ import { RawHtmlEmbed } from '../RawHtmlEmbed';
 import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
 import type { StructuredFields } from '../../types';
+import { getBodyLayoutClasses } from '../../layout/layoutConfig';
+
+import type { LayoutConfig } from '../../layout/layoutConfig';
 
 interface LongformTemplateProps {
   structured: StructuredFields;
+  layoutConfig: LayoutConfig;
   settings: { includeQuote: boolean; includeImage: boolean; devicePreview: string };
 }
 
-export function LongformTemplate({ structured: content, settings }: LongformTemplateProps) {
+export function LongformTemplate({ structured: content, layoutConfig, settings }: LongformTemplateProps) {
   const isMobile = settings.devicePreview === 'mobile';
   const gridClass = isMobile
     ? 'grid grid-cols-1 gap-6'
@@ -20,9 +24,9 @@ export function LongformTemplate({ structured: content, settings }: LongformTemp
 
   return (
     <article className="magazine-template min-h-full flex flex-col bg-white">
-      <div className="flex-grow">
+      <div className={getBodyLayoutClasses(layoutConfig)}>
         {/* Branding Header - Padded */}
-        <div className="px-6 md:px-8 pt-6 md:pt-8">
+        <div className="pt-6 md:pt-8">
           <EditorialHeader />
         </div>
 
@@ -74,7 +78,7 @@ export function LongformTemplate({ structured: content, settings }: LongformTemp
         </header>
 
         {/* Body Content - Responsive Grid for longer content */}
-        <div className="px-6 md:px-8 pb-8">
+        <div className="pb-8">
           <div className="max-w-4xl mx-auto">
             {/* Two-column grid for desktop, single column for mobile */}
             <div className={gridClass}>

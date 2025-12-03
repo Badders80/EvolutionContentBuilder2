@@ -25,7 +25,7 @@ export function EditorialFooter() {
         getFooterClasses(layoutConfig)
       )}
     >
-      <div className="flex w-full items-end justify-between gap-4 text-es-textSoft/80 text-xs md:text-sm">
+      <div className="flex w-full items-end justify-between gap-4 text-es-textSoft/80 text-xs md:text-sm px-6 md:px-8">
         <div className="flex items-center">
           <span aria-label="Evolution Stables">
             <EvolutionLogo />
