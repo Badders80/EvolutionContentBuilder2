@@ -1,9 +1,5 @@
 type ContentMode = 'pre-race' | 'post-race' | 'trainer' | 'investor' | 'social';
 
-export type LayoutType = 'auto' | 'visual' | 'editorial' | 'longform';
-
-export type TemplateType = 'visual' | 'editorial' | 'longform';
-
 type DevicePreview = 'desktop' | 'tablet' | 'mobile';
 
 export type AssistantTargetField =
@@ -39,7 +35,6 @@ export interface AppSettings {
   mode: ContentMode;
   includeQuote: boolean;
   includeImage: boolean;
-  layoutType: LayoutType;
   devicePreview: DevicePreview;
 }
 
@@ -64,6 +59,5 @@ export const initialSettings: AppSettings = {
   mode: 'pre-race',
   includeQuote: true,
   includeImage: true,
-  layoutType: 'auto',
   devicePreview: 'desktop',
 };

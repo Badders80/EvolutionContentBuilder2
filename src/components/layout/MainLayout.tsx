@@ -2,7 +2,6 @@ import React from "react";
 import { useAppContext } from "../../context/AppContext";
 import { Sidebar } from "./Sidebar";
 import { WorkspacePanel } from "../workspace/WorkspacePanel";
-import { PreviewPanel } from "../preview/PreviewPanel";
 import { SavedBuildsPanel } from "../saved/SavedBuildsPanel";
 
 export const MainLayout: React.FC = () => {
@@ -11,9 +10,8 @@ export const MainLayout: React.FC = () => {
   const renderContent = () => {
     if (section === "create") {
       return (
-        <div className="flex-1 h-screen grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)]">
+        <div className="flex-1 h-screen flex flex-col">
           <WorkspacePanel />
-          <PreviewPanel />
         </div>
       );
     }

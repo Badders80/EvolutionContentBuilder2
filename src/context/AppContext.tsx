@@ -9,8 +9,6 @@ import React, {
 } from "react";
 import type { AIMessage, SavedBuild, SectionId, StructuredFields, AppSettings, AssistantTargetField } from "../types";
 import { EMPTY_STRUCTURED, initialSettings } from "../types";
-import type { LayoutConfig } from "../layout/layoutConfig";
-import { suggestLayout } from "../layout/layoutConfig";
 
 const STORAGE_KEY_SAVED_BUILDS = "ecb2_saved_builds";
 const STORAGE_KEY_SETTINGS = "ecb2_settings";
@@ -36,9 +34,6 @@ interface AppContextValue {
   settings: AppSettings;
   updateSettings: (settings: Partial<AppSettings>) => void;
 
-  layoutConfig: LayoutConfig;
-  setLayoutConfig: Dispatch<SetStateAction<LayoutConfig>>;
-
   targetField: AssistantTargetField;
   setTargetField: (field: AssistantTargetField) => void;
 
@@ -58,7 +53,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [messages, setMessages] = useState<AIMessage[]>([]);
   const [structured, setStructured] = useState<StructuredFields>(EMPTY_STRUCTURED);
   const [settings, setSettings] = useState<AppSettings>(initialSettings);
-  const [layoutConfig, setLayoutConfig] = useState<LayoutConfig>(() => suggestLayout(EMPTY_STRUCTURED));
   const [targetField, setTargetField] = useState<AssistantTargetField>("auto");
   const [savedBuilds, setSavedBuilds] = useState<SavedBuild[]>([]);
   const [, setHistory] = useState<StructuredFields[]>([]);
@@ -248,8 +242,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       undo,
       settings,
       updateSettings,
-      layoutConfig,
-      setLayoutConfig,
       targetField,
       setTargetField,
       savedBuilds,
@@ -263,7 +255,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       messages,
       structured,
       settings,
-      layoutConfig,
       targetField,
       savedBuilds,
       updateStructuredField,

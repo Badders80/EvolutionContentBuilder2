@@ -1,9 +1,4 @@
 
-// AI response type for layout orchestrator
-export interface LayoutOrchestratorResponse {
-  layoutType: 'visual' | 'editorial' | 'longform';
-  rationale: string;
-}
 export type ContentType =
   | "race_preview"
   | "post_race"
