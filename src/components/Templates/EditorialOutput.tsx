@@ -16,7 +16,7 @@ export function EditorialOutput() {
       <div className="mx-auto max-w-[800px] px-6 py-10 md:py-12">
         <EditorialHeader />
 
-        <div className="grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)]">
+        <div className="grid gap-10 md:grid-cols-2">
           {/* Left column: body */}
           <div
             className="editorial-body cursor-pointer space-y-4 text-sm leading-relaxed md:text-base"
