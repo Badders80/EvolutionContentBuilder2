@@ -40,7 +40,9 @@ export function EditorialOutput() {
                 onClick={() => setTargetField("quote")}
               >
                 <p className="font-serif italic text-xl md:text-2xl leading-snug text-es-text">
-                  “{content.quote}”
+                  <span className="align-top text-3xl md:text-4xl text-es-text/40">“</span>
+                  {content.quote}
+                  <span className="align-bottom text-3xl md:text-4xl text-es-text/40">”</span>
                 </p>
                 {content.quoteAttribution && (
                   <p className="mt-2 text-xs uppercase tracking-wide text-es-textSoft/80">
