@@ -59,7 +59,7 @@ export function EditorialOutput() {
                 content.videoUrl ||
                 content.rawEmbedHtml) && (
                 <div className="my-8 md:my-10">
-                  <div className="mx-auto w-full max-w-md md:max-w-lg">
+                  <div className="mx-auto w-full max-w-lg md:max-w-xl">
                     {content.imagePreview || content.featuredImageUrl ? (
                       <SmartImage
                         src={content.imagePreview || content.featuredImageUrl}
