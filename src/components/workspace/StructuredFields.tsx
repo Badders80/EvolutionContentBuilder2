@@ -24,9 +24,9 @@ export const StructuredFields: React.FC = () => {
 
   const handleChange =
     (field: keyof StructuredFieldsType) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      updateStructuredField(field, e.target.value);
-    };
+      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        updateStructuredField(field, e.target.value);
+      };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -79,11 +79,10 @@ export const StructuredFields: React.FC = () => {
               key={value}
               type="button"
               onClick={() => updateSettings({ mode: value })}
-              className={`text-[11px] px-3 py-2 rounded border transition ${
-                settings.mode === value
+              className={`text-[11px] px-3 py-2 rounded border transition ${settings.mode === value
                   ? "bg-slate-900 text-white border-slate-900"
                   : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-              }`}
+                }`}
               aria-pressed={settings.mode === value}
             >
               {label}
@@ -143,10 +142,10 @@ export const StructuredFields: React.FC = () => {
         <div className="space-y-2 p-2 border rounded bg-white">
           {structured.imagePreview ? (
             <div className="relative group">
-              <img 
-                src={structured.imagePreview} 
-                alt="Preview" 
-                className="w-full h-32 object-cover rounded border bg-slate-100" 
+              <img
+                src={structured.imagePreview}
+                alt="Preview"
+                className="w-full h-32 object-cover rounded border bg-slate-100"
               />
               <button
                 onClick={() => updateStructuredFields({ imageFile: null, imagePreview: null })}
@@ -167,7 +166,7 @@ export const StructuredFields: React.FC = () => {
               </label>
             </div>
           )}
-          
+
           <input
             placeholder="Image Caption"
             className="w-full border rounded px-2 py-1 text-xs"
@@ -200,12 +199,12 @@ export const StructuredFields: React.FC = () => {
           Video URL (Optional MP4/MOV)
         </label>
         <input
-        className="w-full border rounded px-2 py-1 text-xs"
-        value={structured.videoUrl}
-        onChange={handleChange("videoUrl")}
-        placeholder="Paste a direct link to an MP4 or MOV file"
-      />
-    </div>
+          className="w-full border rounded px-2 py-1 text-xs"
+          value={structured.videoUrl}
+          onChange={handleChange("videoUrl")}
+          placeholder="Paste a direct link to an MP4 or MOV file"
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="space-y-2">
