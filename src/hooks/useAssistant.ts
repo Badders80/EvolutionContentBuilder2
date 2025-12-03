@@ -165,12 +165,12 @@ ${currentLayout}
         jsonString = jsonString.substring(firstOpen, lastClose + 1);
       }
 
-      let parsed: any = null;
+      let parsed: import("../types/content").LayoutOrchestratorResponse | null = null;
 
       try {
         parsed = JSON.parse(jsonString);
 
-        if (parsed.layoutType) {
+        if (parsed && parsed.layoutType) {
           updateSettings({ layoutType: parsed.layoutType });
           appendMessage({
             role: "system",
@@ -189,11 +189,12 @@ ${currentLayout}
         return false;
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Layout Orchestrator error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown layout communication error";
       appendMessage({
         role: "system",
-        content: `Error: ${error?.message || "Unknown layout communication error"}`,
+        content: `Error: ${errorMessage}`,
       });
       return false;
     } finally {

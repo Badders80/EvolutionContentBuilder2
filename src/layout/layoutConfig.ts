@@ -96,7 +96,7 @@ export interface LayoutConfig {
  */
 export function suggestLayout(content: StructuredFields): LayoutConfig {
   const wordCount =
-    (content.body ?? "")
+    content.body
       .split(/\s+/)
       .filter(Boolean).length;
 
