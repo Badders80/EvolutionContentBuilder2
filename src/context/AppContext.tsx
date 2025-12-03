@@ -10,15 +10,67 @@ import React, {
 import type { AIMessage, SavedBuild, SectionId, StructuredFields, AppSettings, AssistantTargetField } from "../types";
 import { EMPTY_STRUCTURED, initialSettings } from "../types";
 
+type QuotePosition = "left" | "right" | "none";
+
+type HeaderStyle = "compact" | "standard" | "hero";
+type FooterEmphasis = "light" | "standard";
+type WatermarkStyle = "subtle" | "off";
+
+export type LayoutType = "poster" | "editorial" | "longform";
+
+export interface LayoutConfig {
+  layoutType: LayoutType;
+  twoColumn: boolean;
+  headlineSpansColumns: boolean;
+  quotePosition: QuotePosition;
+  headerStyle: HeaderStyle;
+  footerEmphasis: FooterEmphasis;
+  watermarkStyle: WatermarkStyle;
+}
+
+export function suggestLayout(content: StructuredFields): LayoutConfig {
+  const wordCount = (content.body ?? "")
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  const hasVisual = Boolean(
+    content.featuredImageUrl ||
+    content.imagePreview ||
+    content.videoUrl ||
+    content.rawEmbedHtml
+  );
+  const hasQuote = Boolean(content.quote);
+
+  let layoutType: LayoutType;
+
+  if (wordCount < 200 && (hasVisual || hasQuote)) {
+    layoutType = "poster";
+  } else if (wordCount > 600) {
+    layoutType = "longform";
+  } else {
+    layoutType = "editorial";
+  }
+
+  return {
+    layoutType,
+    twoColumn: layoutType !== "poster",
+    headlineSpansColumns: layoutType !== "poster",
+    quotePosition: hasQuote ? "right" : "none",
+    headerStyle: layoutType === "poster" ? "hero" : "standard",
+    footerEmphasis: "light",
+    watermarkStyle: "subtle",
+  };
+}
+
 const STORAGE_KEY_SAVED_BUILDS = "ecb2_saved_builds";
 const STORAGE_KEY_SETTINGS = "ecb2_settings";
 
 interface AppContextValue {
   section: SectionId;
-  setSection: (section: SectionId) => void;
+  setSection: Dispatch<SetStateAction<SectionId>>;
 
   currentModel: string;
-  setCurrentModel: (model: string) => void;
+  setCurrentModel: Dispatch<SetStateAction<string>>;
 
   messages: AIMessage[];
   setMessages: Dispatch<SetStateAction<AIMessage[]>>;
@@ -26,13 +78,16 @@ interface AppContextValue {
   clearMessages: () => void;
 
   structured: StructuredFields;
-  setStructured: (s: StructuredFields) => void;
+  setStructured: Dispatch<SetStateAction<StructuredFields>>;
   updateStructuredField: (field: keyof StructuredFields, value: string) => void;
   updateStructuredFields: (fields: Partial<StructuredFields>) => void;
   undo: () => void;
 
   settings: AppSettings;
   updateSettings: (settings: Partial<AppSettings>) => void;
+
+  layoutConfig: LayoutConfig;
+  setLayoutConfig: Dispatch<SetStateAction<LayoutConfig>>;
 
   targetField: AssistantTargetField;
   setTargetField: (field: AssistantTargetField) => void;
@@ -53,6 +108,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [messages, setMessages] = useState<AIMessage[]>([]);
   const [structured, setStructured] = useState<StructuredFields>(EMPTY_STRUCTURED);
   const [settings, setSettings] = useState<AppSettings>(initialSettings);
+  const [layoutConfig, setLayoutConfig] = useState<LayoutConfig>(() => suggestLayout(EMPTY_STRUCTURED));
   const [targetField, setTargetField] = useState<AssistantTargetField>("auto");
   const [savedBuilds, setSavedBuilds] = useState<SavedBuild[]>([]);
   const [, setHistory] = useState<StructuredFields[]>([]);
@@ -242,6 +298,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       undo,
       settings,
       updateSettings,
+      layoutConfig,
+      setLayoutConfig,
       targetField,
       setTargetField,
       savedBuilds,
@@ -249,7 +307,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       duplicateBuild,
       loadBuild,
     }),
-    [section, currentModel, messages, structured, settings, targetField, savedBuilds]
+    [
+      section,
+      currentModel,
+      messages,
+      structured,
+      settings,
+      layoutConfig,
+      targetField,
+      savedBuilds,
+      updateStructuredField,
+      updateStructuredFields,
+      saveCurrentBuild,
+      loadBuild,
+    ]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

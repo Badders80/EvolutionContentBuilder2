@@ -1,48 +1,65 @@
-import type { ContentData } from "../../../types";
-import { useAppContext } from '../../../context/AppContext';
+import clsx from "clsx";
+import { useAppContext } from "../../../context/AppContext";
 
 const modeLabels: Record<string, string> = {
-  'pre-race': 'PRE-RACE PREVIEW',
-  'post-race': 'POST-RACE REPORT',
-  'trainer': 'TRAINER PROFILE',
-  'investor': 'INVESTOR UPDATE',
-  'social': 'SOCIAL FEATURE',
+  "pre-race": "PRE-RACE PREVIEW",
+  "post-race": "POST-RACE REPORT",
+  "trainer": "TRAINER PROFILE",
+  "investor": "INVESTOR UPDATE",
+  "social": "SOCIAL FEATURE",
 };
 
-type HeaderVariant = 'dark' | 'light';
+function headerPadding(style: "compact" | "standard" | "hero") {
+  switch (style) {
+    case "compact":
+      return "px-4 py-3";
+    case "hero":
+      return "px-6 py-6";
+    case "standard":
+    default:
+      return "px-5 py-4";
+  }
+}
 
-export function EditorialHeader({ content, variant = 'dark' }: { content: ContentData; variant?: HeaderVariant }) {
-  const { settings } = useAppContext();
-  const label = modeLabels[settings.mode] || 'EDITORIAL';
-  const isDark = variant === 'dark';
-  const containerClasses = isDark
-    ? 'mb-8 rounded-md bg-es-text px-4 py-4 text-es-bg'
-    : 'mb-6 pb-3 flex items-baseline justify-between border-b-2 border-black';
-  const textColor = isDark ? 'text-es-bg' : 'text-black';
-  const subTextColor = isDark ? 'text-es-textSoft' : 'text-es-text';
+export function EditorialHeader() {
+  const { structured: content, settings, layoutConfig } = useAppContext();
+  const label = modeLabels[settings.mode] || "EDITORIAL";
 
   return (
-    <header className={containerClasses}>
+    <header
+      className={clsx(
+        "mb-6 rounded-md bg-es-text text-es-bg",
+        headerPadding(layoutConfig.headerStyle)
+      )}
+    >
       <div className="flex items-start justify-between gap-6">
-        <div className="space-y-1">
-          {content.horseName ? (
-            <p className={`text-xs uppercase tracking-wide ${isDark ? 'text-es-bg/80' : 'text-black/70'}`}>
-              {content.horseName}
-            </p>
-          ) : null}
-          <h1 className={`editorial-headline font-serif text-3xl md:text-4xl ${textColor}`}>
-            {content.headline || 'Your Headline Here'}
-          </h1>
-          {content.subheadline ? (
-            <p className={`editorial-subheadline font-serif text-xl md:text-2xl ${subTextColor}`}>
-              {content.subheadline}
-            </p>
-          ) : null}
+        <div className="space-y-2">
+          <p className="inline-flex items-center rounded-full bg-es-bg/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-es-bg/80">
+            {label}
+          </p>
+
+          <div className="space-y-1">
+            <h1 className="font-serif text-3xl md:text-4xl text-es-bg">
+              {content.headline || "Your Headline Here"}
+            </h1>
+            {content.subheadline && (
+              <p className="font-serif text-xl md:text-2xl text-es-textSoft">
+                {content.subheadline}
+              </p>
+            )}
+          </div>
         </div>
-        <div className={`flex flex-col items-end gap-1 text-xs ${isDark ? 'text-es-textSoft' : 'text-es-text'}`}>
-          <span className="tracking-[0.18em] uppercase font-semibold">{label}</span>
+
+        <div className="flex flex-col items-end gap-1 text-xs text-es-textSoft">
+          {/* race meta here in future */}
         </div>
       </div>
+
+      {layoutConfig.watermarkStyle === "subtle" && (
+        <div className="pointer-events-none mt-3 text-[10px] font-semibold uppercase tracking-wide text-es-bg/20">
+          Evolution Stables
+        </div>
+      )}
     </header>
   );
 }

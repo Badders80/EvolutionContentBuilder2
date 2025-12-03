@@ -1,8 +1,8 @@
 import { SmartImage } from '../SmartImage';
 import { RawHtmlEmbed } from '../RawHtmlEmbed';
 import { useAppContext } from '../../context/AppContext';
-import { EditorialHeader } from '../layout/Header/EditorialHeader';
-import { EditorialFooter } from '../layout/Footer/EditorialFooter';
+import { EditorialHeader } from '../layout/Header';
+import { EditorialFooter } from '../layout/Footer';
 
 export function LongformTemplate() {
   const { structured: content, settings } = useAppContext();
@@ -20,7 +20,7 @@ export function LongformTemplate() {
       <div className="flex-grow">
         {/* Branding Header - Padded */}
         <div className="px-6 md:px-8 pt-6 md:pt-8">
-          <EditorialHeader content={content} variant="light" />
+          <EditorialHeader />
         </div>
 
         {/* Full-width Hero */}

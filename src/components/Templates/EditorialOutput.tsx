@@ -8,19 +8,85 @@ import { useAppContext } from "../../context/AppContext";
  * Premium greyscale editorial output template
  */
 export function EditorialOutput() {
-  const { structured: content, settings, setTargetField } = useAppContext();
+  const { structured: content, settings, setTargetField, layoutConfig } = useAppContext();
 
   const paragraphs = (content.body ?? "")
     .split(/\n{2,}/)
     .map((p) => p.trim())
     .filter(Boolean);
 
+  const quoteBlock =
+    settings.includeQuote &&
+    content.quote && (
+      <div
+        className="cursor-pointer"
+        onClick={() => setTargetField("quote")}
+      >
+        <p className="font-serif italic text-xl leading-relaxed text-es-textSoft md:text-2xl">
+          “{content.quote}”
+        </p>
+        {content.quoteAttribution && (
+          <p className="mt-2 text-xs uppercase tracking-wide text-es-textSoft/80">
+            — {content.quoteAttribution}
+          </p>
+        )}
+      </div>
+    );
+
+  const mediaBlock =
+    settings.includeImage &&
+    (content.featuredImageUrl ||
+      content.imagePreview ||
+      content.videoUrl ||
+      content.rawEmbedHtml) && (
+      <div className="my-8 md:my-10">
+        <div className="mx-auto w-full max-w-md md:max-w-lg">
+          {content.imagePreview || content.featuredImageUrl ? (
+            <SmartImage
+              src={content.imagePreview || content.featuredImageUrl}
+              alt={content.caption ?? content.headline ?? ""}
+              className="w-full rounded-lg object-cover"
+            />
+          ) : null}
+
+          {content.videoUrl &&
+            !content.imagePreview &&
+            !content.featuredImageUrl && (
+              <div className="mt-4 w-full overflow-hidden rounded-lg aspect-video">
+                <iframe
+                  src={content.videoUrl}
+                  className="h-full w-full"
+                  title={content.headline || "Embedded video"}
+                  allowFullScreen
+                />
+              </div>
+            )}
+
+          {content.rawEmbedHtml &&
+            !content.imagePreview &&
+            !content.featuredImageUrl &&
+            !content.videoUrl && (
+              <div
+                className="mt-4 w-full overflow-hidden rounded-lg aspect-video"
+                dangerouslySetInnerHTML={{
+                  __html: content.rawEmbedHtml,
+                }}
+              />
+            )}
+        </div>
+      </div>
+    );
+
+  const gridClass = layoutConfig.twoColumn
+    ? "grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)]"
+    : "space-y-10";
+
   return (
     <div className="bg-es-bg text-es-text">
       <div className="mx-auto max-w-[800px] px-6 py-10 md:py-12">
-        <EditorialHeader content={content} />
+        <EditorialHeader />
 
-        <div className="grid gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)]">
+        <div className={gridClass}>
           {/* Left column: body */}
           <div
             className="editorial-body cursor-pointer space-y-4 text-sm leading-relaxed md:text-base"
@@ -33,71 +99,23 @@ export function EditorialOutput() {
                 Your article content will appear here…
               </p>
             )}
-          </div>
 
-          {/* Right column: quote + media */}
-          <div className="space-y-8">
-            {/* Quote */}
-            {settings.includeQuote && content.quote && (
-              <div
-                className="cursor-pointer"
-                onClick={() => setTargetField("quote")}
-              >
-                <p className="font-serif italic text-xl leading-relaxed text-es-textSoft md:text-2xl">
-                  “{content.quote}”
-                </p>
-                {content.quoteAttribution && (
-                  <p className="mt-2 text-xs uppercase tracking-wide text-es-textSoft/80">
-                    — {content.quoteAttribution}
-                  </p>
-                )}
+            {!layoutConfig.twoColumn && (
+              <div className="space-y-8 pt-6">
+                {layoutConfig.quotePosition !== "none" && quoteBlock}
+                {mediaBlock}
               </div>
             )}
-
-            {/* Embed / video / image */}
-            {settings.includeImage &&
-              (content.featuredImageUrl ||
-                content.imagePreview ||
-                content.videoUrl ||
-                content.rawEmbedHtml) && (
-                <div className="my-8 md:my-10">
-                  <div className="mx-auto w-full max-w-md md:max-w-lg">
-                    {content.imagePreview || content.featuredImageUrl ? (
-                      <SmartImage
-                        src={content.imagePreview || content.featuredImageUrl}
-                        alt={content.caption ?? content.headline ?? ""}
-                        className="w-full rounded-lg object-cover"
-                      />
-                    ) : null}
-
-                    {content.videoUrl &&
-                      !content.imagePreview &&
-                      !content.featuredImageUrl && (
-                        <div className="mt-4 w-full overflow-hidden rounded-lg aspect-video">
-                          <iframe
-                            src={content.videoUrl}
-                            className="h-full w-full"
-                            title={content.headline || "Embedded video"}
-                            allowFullScreen
-                          />
-                        </div>
-                      )}
-
-                    {content.rawEmbedHtml &&
-                      !content.imagePreview &&
-                      !content.featuredImageUrl &&
-                      !content.videoUrl && (
-                        <div
-                          className="mt-4 w-full overflow-hidden rounded-lg aspect-video"
-                          dangerouslySetInnerHTML={{
-                            __html: content.rawEmbedHtml,
-                          }}
-                        />
-                      )}
-                  </div>
-                </div>
-              )}
           </div>
+
+          {layoutConfig.twoColumn && (
+            /* Right column: quote + media */
+            <div className="space-y-8">
+              {layoutConfig.quotePosition === "left" && quoteBlock}
+              {mediaBlock}
+              {layoutConfig.quotePosition === "right" && quoteBlock}
+            </div>
+          )}
         </div>
 
         <EditorialFooter />

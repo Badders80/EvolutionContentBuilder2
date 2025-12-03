@@ -1,3 +1,6 @@
+import clsx from "clsx";
+import { useAppContext } from "../../../context/AppContext";
+
 const EvolutionLogo = () => (
   <svg
     className="h-[1.05rem] w-[1.05rem] md:h-[1.2rem] md:w-[1.2rem]"
@@ -9,26 +12,35 @@ const EvolutionLogo = () => (
   </svg>
 );
 
-export function EditorialFooter({
-  className = '',
-}: {
-  className?: string;
-}) {
-  const containerClass = `relative overflow-hidden footer-shell bg-es-text text-es-textSoft ${className}`;
-  const innerClass =
-    'footer-inner flex w-full items-end justify-between gap-4 px-4 pt-6 pb-4 text-es-textSoft/90 md:px-6 min-h-[100px]';
-  const hoverColor = 'hover:text-es-bg';
+function footerPadding(style: "light" | "standard") {
+  switch (style) {
+    case "light":
+      return "px-4 py-3";
+    case "standard":
+    default:
+      return "px-5 py-4";
+  }
+}
+
+export function EditorialFooter() {
+  const { layoutConfig } = useAppContext();
+  const hoverColor = "hover:text-es-bg";
 
   return (
-    <footer className={containerClass}>
-      <div className={innerClass}>
-        <div className="footer-logo flex items-center">
+    <footer
+      className={clsx(
+        "mt-10 rounded-md bg-es-text",
+        footerPadding(layoutConfig.footerEmphasis)
+      )}
+    >
+      <div className="flex w-full items-end justify-between gap-4 text-es-textSoft/80 text-xs md:text-sm">
+        <div className="flex items-center">
           <span aria-label="Evolution Stables">
             <EvolutionLogo />
           </span>
         </div>
 
-        <div className="footer-icons flex items-center gap-4 md:gap-6">
+        <div className="footer-icons flex items-center gap-4 md:gap-6 text-es-textSoft">
           <a
             href="https://x.com/evostables"
             target="_blank"
