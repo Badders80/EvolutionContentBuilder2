@@ -49,11 +49,11 @@ export function EditorialOutput() {
                   className="my-8 md:my-10 cursor-pointer hover:bg-es-bgSoft transition-colors"
                   onClick={() => setTargetField('quote')}
                 >
-                  <p className="editorial-quote font-serif italic text-xl md:text-2xl leading-relaxed text-es-textSoft">
+                  <p className="font-serif italic text-xl md:text-2xl leading-relaxed text-es-textSoft">
                     “{content.quote}”
                   </p>
                   {content.quoteAttribution && (
-                    <p className="editorial-caption mt-2">
+                    <p className="mt-2 text-xs uppercase tracking-wide text-es-textSoft/80">
                       — {content.quoteAttribution}
                     </p>
                   )}
@@ -73,20 +73,24 @@ export function EditorialOutput() {
                     ) : null}
 
                     {content.videoUrl && !content.imagePreview && !content.featuredImageUrl && (
-                      <iframe
-                        src={content.videoUrl}
-                        className="mt-4 w-full aspect-video rounded-lg"
-                        title="Embedded video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
+                      <div className="mt-4 w-full aspect-video overflow-hidden rounded-lg">
+                        <iframe
+                          src={content.videoUrl}
+                          className="h-full w-full"
+                          title="Embedded video"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      </div>
                     )}
 
                     {content.rawEmbedHtml && !content.imagePreview && !content.featuredImageUrl && !content.videoUrl && (
-                      <div
-                        className="w-full aspect-video rounded-lg overflow-hidden"
-                        dangerouslySetInnerHTML={{ __html: content.rawEmbedHtml }}
-                      />
+                      <div className="mt-4 w-full aspect-video overflow-hidden rounded-lg">
+                        <div
+                          className="h-full w-full"
+                          dangerouslySetInnerHTML={{ __html: content.rawEmbedHtml }}
+                        />
+                      </div>
                     )}
 
                     {content.caption && (
