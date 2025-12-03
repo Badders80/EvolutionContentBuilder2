@@ -64,7 +64,7 @@ export function InvestorPreview({ doc, media }: InvestorPreviewProps) {
 
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 border-4 border-red-500">
       {/* Dark hero toggle */}
       <div className="flex justify-end px-6 pt-4">
         <button
@@ -83,6 +83,7 @@ export function InvestorPreview({ doc, media }: InvestorPreviewProps) {
             alt="Evolution Stables"
             className="h-6 w-auto"
           />
+          <span className="text-xs text-neutral-400">DEBUG 123</span>
         </div>
         <span className="text-[11px] tracking-[0.2em] uppercase text-neutral-500">
           {CONTENT_LABELS[doc.content_type] || "UPDATE"}
