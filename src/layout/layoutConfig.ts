@@ -72,9 +72,9 @@ export function headerPadding(style: HeaderStyle): string {
 export function footerPadding(style: FooterEmphasis): string {
   switch (style) {
     case "light":
-      return "px-4 py-3";
+      return "px-4 py-9"; // tripled from py-3
     case "standard":
     default:
-      return "px-5 py-4";
+      return "px-5 py-12"; // tripled from py-4
   }
 }
