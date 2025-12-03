@@ -1,5 +1,7 @@
+
 import clsx from "clsx";
 import { useAppContext } from "../../../context/AppContext";
+import { headerPadding } from "../../../layout/layoutConfig";
 
 const modeLabels: Record<string, string> = {
   "pre-race": "PRE-RACE PREVIEW",
@@ -8,18 +10,6 @@ const modeLabels: Record<string, string> = {
   "investor": "INVESTOR UPDATE",
   "social": "SOCIAL FEATURE",
 };
-
-function headerPadding(style: "compact" | "standard" | "hero") {
-  switch (style) {
-    case "compact":
-      return "px-4 py-3";
-    case "hero":
-      return "px-6 py-6";
-    case "standard":
-    default:
-      return "px-5 py-4";
-  }
-}
 
 export function EditorialHeader() {
   const { structured: content, settings, layoutConfig } = useAppContext();

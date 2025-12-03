@@ -9,58 +9,8 @@ import React, {
 } from "react";
 import type { AIMessage, SavedBuild, SectionId, StructuredFields, AppSettings, AssistantTargetField } from "../types";
 import { EMPTY_STRUCTURED, initialSettings } from "../types";
-
-type QuotePosition = "left" | "right" | "none";
-
-type HeaderStyle = "compact" | "standard" | "hero";
-type FooterEmphasis = "light" | "standard";
-type WatermarkStyle = "subtle" | "off";
-
-export type LayoutType = "poster" | "editorial" | "longform";
-
-export interface LayoutConfig {
-  layoutType: LayoutType;
-  twoColumn: boolean;
-  headlineSpansColumns: boolean;
-  quotePosition: QuotePosition;
-  headerStyle: HeaderStyle;
-  footerEmphasis: FooterEmphasis;
-  watermarkStyle: WatermarkStyle;
-}
-
-export function suggestLayout(content: StructuredFields): LayoutConfig {
-  const wordCount = (content.body ?? "")
-    .split(/\s+/)
-    .filter(Boolean).length;
-
-  const hasVisual = Boolean(
-    content.featuredImageUrl ||
-    content.imagePreview ||
-    content.videoUrl ||
-    content.rawEmbedHtml
-  );
-  const hasQuote = Boolean(content.quote);
-
-  let layoutType: LayoutType;
-
-  if (wordCount < 200 && (hasVisual || hasQuote)) {
-    layoutType = "poster";
-  } else if (wordCount > 600) {
-    layoutType = "longform";
-  } else {
-    layoutType = "editorial";
-  }
-
-  return {
-    layoutType,
-    twoColumn: layoutType !== "poster",
-    headlineSpansColumns: layoutType !== "poster",
-    quotePosition: hasQuote ? "right" : "none",
-    headerStyle: layoutType === "poster" ? "hero" : "standard",
-    footerEmphasis: "light",
-    watermarkStyle: "subtle",
-  };
-}
+import type { LayoutConfig } from "../layout/layoutConfig";
+import { suggestLayout } from "../layout/layoutConfig";
 
 const STORAGE_KEY_SAVED_BUILDS = "ecb2_saved_builds";
 const STORAGE_KEY_SETTINGS = "ecb2_settings";

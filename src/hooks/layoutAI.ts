@@ -1,5 +1,5 @@
 import type { StructuredFields, AppSettings } from "../types";
-import type { LayoutConfig } from "../context/AppContext";
+import type { LayoutConfig } from "../layout/layoutConfig";
 
 export function runLayoutTweaks(
   current: LayoutConfig,
