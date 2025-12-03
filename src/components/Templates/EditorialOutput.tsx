@@ -36,10 +36,10 @@ export function EditorialOutput() {
             {/* Quote */}
             {settings.includeQuote && content.quote && (
               <div
-                className="cursor-pointer"
+                className="cursor-pointer text-center"
                 onClick={() => setTargetField("quote")}
               >
-                <p className="font-serif italic text-xl leading-relaxed text-es-textSoft md:text-2xl">
+                <p className="font-serif italic text-xl md:text-2xl leading-snug text-es-text">
                   “{content.quote}”
                 </p>
                 {content.quoteAttribution && (
