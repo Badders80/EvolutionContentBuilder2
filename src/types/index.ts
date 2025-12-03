@@ -29,6 +29,8 @@ export interface ContentData {
   rawEmbedHtml: string;
   horseName: string;
   raceLocation: string;
+  externalEmbedHtml?: string;
+  externalEmbedTitle?: string;
 }
 
 export type StructuredFields = ContentData;

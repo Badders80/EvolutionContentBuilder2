@@ -5,6 +5,7 @@ import type { StructuredFields } from "../types";
 export type LayoutType = "poster" | "editorial" | "longform";
 export type HeaderStyle = "compact" | "standard" | "hero";
 export type FooterEmphasis = "light" | "standard";
+export type EmbedStyle = "fullHeightCard" | "inlineThumbnail";
 export type QuotePosition = "left" | "right" | "none";
 export type WatermarkStyle = "subtle" | "off";
 
@@ -16,6 +17,7 @@ export interface LayoutConfig {
   headerStyle: HeaderStyle;
   footerEmphasis: FooterEmphasis;
   watermarkStyle: WatermarkStyle;
+  embedStyle: EmbedStyle;
 }
 
 /**
@@ -53,7 +55,17 @@ export function suggestLayout(content: StructuredFields): LayoutConfig {
     headerStyle: layoutType === "poster" ? "hero" : "standard",
     footerEmphasis: "light",
     watermarkStyle: "subtle",
+    embedStyle: "fullHeightCard",
   };
+}
+
+/** Helper for embed card classes based on layout config. */
+export function getEmbedCardClasses(config: LayoutConfig): string {
+  if (config.embedStyle === "inlineThumbnail") {
+    return "relative w-full max-w-md rounded-lg border border-slate-200 bg-slate-50 p-3";
+  }
+  // default full height card
+  return "flex-1 relative w-full max-h-[480px] rounded-xl border border-slate-200 bg-slate-50 p-4";
 }
 
 /** Helpers for header/footer padding so all variants are centralised. */

@@ -1,6 +1,7 @@
 import { EditorialHeader } from "../layout/Header";
 import { EditorialFooter } from "../layout/Footer";
 import { SmartImage } from "../SmartImage";
+import { ExternalEmbedCard } from "../ExternalEmbedCard";
 import { useAppContext } from "../../context/AppContext";
 
 export function EditorialOutput() {
@@ -32,7 +33,7 @@ export function EditorialOutput() {
           </div>
 
           {/* Right column: quote + media */}
-          <div className="space-y-8">
+          <div className="flex flex-col gap-6">
             {/* Quote */}
             {settings.includeQuote && content.quote && (
               <div
@@ -52,12 +53,11 @@ export function EditorialOutput() {
               </div>
             )}
 
-            {/* Image / video / raw embed */}
+            {/* Image / video block */}
             {settings.includeImage &&
               (content.featuredImageUrl ||
                 content.imagePreview ||
-                content.videoUrl ||
-                content.rawEmbedHtml) && (
+                content.videoUrl) && (
                 <div className="my-8 md:my-10">
                   <div className="mx-auto w-full max-w-lg md:max-w-xl">
                     {content.imagePreview || content.featuredImageUrl ? (
@@ -80,21 +80,17 @@ export function EditorialOutput() {
                           />
                         </div>
                       )}
-
-                    {content.rawEmbedHtml &&
-                      !content.imagePreview &&
-                      !content.featuredImageUrl &&
-                      !content.videoUrl && (
-                        <div
-                          className="mt-4 w-full overflow-hidden rounded-lg aspect-[4/3]"
-                          dangerouslySetInnerHTML={{
-                            __html: content.rawEmbedHtml,
-                          }}
-                        />
-                      )}
                   </div>
                 </div>
               )}
+
+            {/* External embed block */}
+            {content.externalEmbedHtml && (
+              <ExternalEmbedCard
+                html={content.externalEmbedHtml}
+                title={content.externalEmbedTitle}
+              />
+            )}
           </div>
         </div>
 
