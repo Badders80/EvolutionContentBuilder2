@@ -5,6 +5,7 @@ import { determineTemplate } from "../../utils/layoutRules";
 import { VisualTemplate } from "../Templates/VisualTemplate";
 import { EditorialOutput } from "../Templates/EditorialOutput";
 import { LongformTemplate } from "../Templates/LongformTemplate";
+import { InvestorPreview } from "../../features/investorhub/InvestorPreview";
 import { exportToPDF, exportToHTMLFull } from "../../utils";
 import { runLayoutTweaks, runOptimise } from "../../hooks/layoutAI";
 
@@ -75,7 +76,16 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({ isExport }) => {
     }
   };
 
+  // Type guard to check if structured is a ContentDocument
+  function isContentDocument(obj: any): obj is import("../../types/content").ContentDocument {
+    return obj && typeof obj === 'object' && 'content_type' in obj;
+  }
+
   const renderTemplate = () => {
+    // Render InvestorPreview if content_type is investor_report
+    if (isContentDocument(structured) && structured.content_type === 'investor_report') {
+      return <InvestorPreview doc={structured as import("../../types/content").ContentDocument} />;
+    }
     const templateProps = { structured, layoutConfig, settings };
     switch (resolvedLayout) {
       case 'visual':

@@ -64,7 +64,10 @@ export function InvestorPreview({ doc, media }: InvestorPreviewProps) {
 
 
   return (
-    <div className="min-h-screen bg-neutral-50 border-4 border-red-500">
+    <div className="min-h-screen bg-red-500 border-4 border-black relative">
+      <div style={{position: 'fixed', top: 40, left: 0, zIndex: 9999, background: 'black', color: 'white', padding: '6px 18px', fontWeight: 'bold', fontSize: 22, letterSpacing: 2}}>
+        DEBUG REF
+      </div>
       {/* Dark hero toggle */}
       <div className="flex justify-end px-6 pt-4">
         <button
@@ -83,14 +86,14 @@ export function InvestorPreview({ doc, media }: InvestorPreviewProps) {
             alt="Evolution Stables"
             className="h-6 w-auto"
           />
-          <span className="text-xs text-neutral-400">DEBUG 123</span>
+          <span className="text-xs text-white bg-black px-2 py-1 rounded">DEBUG 123</span>
         </div>
         <span className="text-[11px] tracking-[0.2em] uppercase text-neutral-500">
           {CONTENT_LABELS[doc.content_type] || "UPDATE"}
         </span>
       </header>
       {/* Hero + grid */}
-      <div className="max-w-5xl mx-auto px-6 pt-10 pb-10 grid gap-12 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)]">
+      <div className="max-w-5xl mx-auto px-6 pt-10 pb-10 grid gap-12 md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] bg-red-500">
         {/* Left: hero text + body */}
         <div>
           <h1 className={heroHeadlineClass}>{doc.headline}</h1>
@@ -98,14 +101,14 @@ export function InvestorPreview({ doc, media }: InvestorPreviewProps) {
           {/* Mobile: pull-quote below hero */}
           <div className="md:hidden mt-8">
             {doc.body_highlights && doc.body_highlights.length > 0 && (
-              <div className={quoteCardClass}>
+              <div className={quoteCardClass + ' bg-red-500'}>
                 <div className="text-lg md:text-xl italic leading-relaxed text-neutral-800">{doc.body_highlights[0]}</div>
                 <div className="mt-4 text-[11px] tracking-[0.18em] uppercase text-neutral-500">{attribution}</div>
               </div>
             )}
           </div>
           {/* Body text */}
-          <section className="max-w-3xl mx-auto px-0 mt-10 space-y-5 text-neutral-800 leading-relaxed">
+          <section className="max-w-3xl mx-auto px-0 mt-10 space-y-5 text-neutral-800 leading-relaxed bg-red-500">
             <p className="text-base leading-7">{doc.body_intro}</p>
             <p className="text-base leading-7">{doc.body_details}</p>
             {doc.body_highlights && doc.body_highlights.length > 1 && (
