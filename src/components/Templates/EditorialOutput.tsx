@@ -84,7 +84,7 @@ export function EditorialOutput() {
                       !content.featuredImageUrl &&
                       !content.videoUrl && (
                         <div
-                          className="mt-4 w-full overflow-hidden rounded-lg aspect-video"
+                          className="mt-4 w-full overflow-hidden rounded-lg aspect-[4/3]"
                           dangerouslySetInnerHTML={{
                             __html: content.rawEmbedHtml,
                           }}
