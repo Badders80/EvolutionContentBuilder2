@@ -37,6 +37,7 @@ interface AppContextValue {
   targetField: AssistantTargetField;
   setTargetField: (field: AssistantTargetField) => void;
 
+  lastUpdateTimestamp: number | null;
   savedBuilds: SavedBuild[];
   saveCurrentBuild: (name?: string) => void;
   duplicateBuild: (id: string) => void;
@@ -56,6 +57,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [targetField, setTargetField] = useState<AssistantTargetField>("auto");
   const [savedBuilds, setSavedBuilds] = useState<SavedBuild[]>([]);
   const [, setHistory] = useState<StructuredFields[]>([]);
+  const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState<number | null>(null);
 
   useEffect(() => {
     try {
@@ -116,6 +118,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...prev,
       [field]: value,
     }));
+    setLastUpdateTimestamp(Date.now());
   };
 
   const updateStructuredFields = (fields: UpdateStructuredInput) => {
@@ -124,6 +127,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       ...prev,
       ...fields,
     }));
+    setLastUpdateTimestamp(Date.now());
   };
 
   const undo = () => {
@@ -131,6 +135,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (prev.length === 0) return prev;
       const previous = prev[prev.length - 1];
       setStructured(previous);
+      setLastUpdateTimestamp(Date.now());
       return prev.slice(0, -1);
     });
   };
@@ -223,6 +228,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMessages(build.messages);
     setStructured(migratedStructured);
     setSettings(mergedSettings);
+    setLastUpdateTimestamp(Date.now());
   };
 
   const value: AppContextValue = useMemo(
@@ -244,6 +250,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateSettings,
       targetField,
       setTargetField,
+      lastUpdateTimestamp,
       savedBuilds,
       saveCurrentBuild,
       duplicateBuild,
@@ -256,6 +263,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       structured,
       settings,
       targetField,
+      lastUpdateTimestamp,
       savedBuilds,
       updateStructuredField,
       updateStructuredFields,
