@@ -2,8 +2,7 @@ import { EditorialHeader } from "../layout/Header";
 import { EditorialFooter } from "../layout/Footer";
 import { SmartImage } from "../SmartImage";
 import { ExternalEmbedCard } from "../ExternalEmbedCard";
-import { getBodyColumnClasses, getBodyLayoutClasses } from "../../layout/layoutConfig";
-import { getRightColumnClasses, getPullQuoteClasses } from "../../layout/layoutConfig";
+import { getBodyColumnClasses, getRightColumnClasses, getPullQuoteClasses, getArticleContainerClasses, getArticleColumnWrapperClasses } from "../../layout/layoutConfig";
 import type { StructuredFields } from "../../types";
 
 import type { LayoutConfig } from "../../layout/layoutConfig";
@@ -23,10 +22,9 @@ export function EditorialOutput({ structured: content, layoutConfig, settings }:
 
   return (
     <div className="bg-es-bg text-es-text">
-      <div className={getBodyLayoutClasses(layoutConfig)}>
+      <div className={getArticleContainerClasses()}>
         <EditorialHeader />
-
-        <div className="grid gap-10 md:grid-cols-2">
+        <div className={getArticleColumnWrapperClasses(layoutConfig)}>
           {/* Left column: body */}
           <div className={getBodyColumnClasses(layoutConfig)}>
             {paragraphs.length > 0 ? (
@@ -37,7 +35,6 @@ export function EditorialOutput({ structured: content, layoutConfig, settings }:
               </p>
             )}
           </div>
-
           {/* Right column: quote + media */}
           <div className={getRightColumnClasses(layoutConfig)}>
             {/* Quote */}

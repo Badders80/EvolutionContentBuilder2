@@ -1,3 +1,18 @@
+// [NEW HELPER] 1. The container that centers the entire article and controls vertical/horizontal padding
+export function getArticleContainerClasses(): string {
+  // mx-auto: centers the content
+  // max-w-[800px]: hard width lock
+  // px-6 py-10 md:py-12: vertical and horizontal padding token (editorial default)
+  return "mx-auto max-w-[800px] px-6 py-10 md:py-12";
+}
+
+// [NEW HELPER] 2. The wrapper for the two-column/single-column layout
+export function getArticleColumnWrapperClasses(config: LayoutConfig): string {
+  const base = "gap-10";
+  // Dynamically switches between single column (flex) and two-column grid
+  const columns = config.twoColumn ? "grid md:grid-cols-2" : "flex flex-col";
+  return `${base} ${columns}`;
+}
 /**
  * Returns classes for the outer body container (max width, padding, alignment).
  * Does NOT handle columns or grid.
