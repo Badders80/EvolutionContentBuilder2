@@ -15,11 +15,11 @@ export const StructuredFields: React.FC = () => {
   } = useAppContext();
 
   const modeOptions = [
-    { value: "pre-race", label: "Pre Race" },
-    { value: "post-race", label: "Post Race" },
-    { value: "trainer", label: "Trainer Update" },
+    { value: "pre-race", label: "Pre-Race Update" },
+    { value: "post-race", label: "Post-Race Report" },
+    { value: "trainer", label: "Trainer Report" },
     { value: "investor", label: "Investor Update" },
-    { value: "social", label: "Social Feature" },
+    // "social" dropped for now
   ] as const;
 
   const handleChange =

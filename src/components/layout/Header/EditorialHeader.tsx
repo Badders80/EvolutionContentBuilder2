@@ -4,11 +4,11 @@ import { useAppContext } from "../../../context/AppContext";
 import { headerPadding } from "../../../layout/layoutConfig";
 
 const modeLabels: Record<string, string> = {
-  "pre-race": "PRE-RACE PREVIEW",
+  "pre-race": "PRE-RACE UPDATE",
   "post-race": "POST-RACE REPORT",
-  "trainer": "TRAINER PROFILE",
+  "trainer": "TRAINER REPORT",
   "investor": "INVESTOR UPDATE",
-  "social": "SOCIAL FEATURE",
+  // "social" dropped for now
 };
 
 export function EditorialHeader() {
