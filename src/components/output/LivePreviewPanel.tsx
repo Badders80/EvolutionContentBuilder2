@@ -31,7 +31,9 @@ export const LivePreviewPanel: React.FC = () => {
                 </div>
             </header>
             {/* The single source of truth for the output */}
+            <div id="editorial-output-container">
                 <EditorialOutput data={structured} />
+            </div>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useAppContext } from "../../context/AppContext";
 import type { StructuredFields as StructuredFieldsType, AssistantTargetField } from "../../types";
-// import { ExportButton } from "../output/ExportButton";
+import { ExportButton } from "../output/ExportButton";
 // import { getWordCount } from "../../utils/wordCount";
 import { RefreshCw } from "lucide-react";
 
@@ -89,7 +89,7 @@ export const StructuredFields: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {/* ExportButton removed: implement or restore if available */}
+            <ExportButton />
             <button
               type="button"
               onClick={() => undo()}
