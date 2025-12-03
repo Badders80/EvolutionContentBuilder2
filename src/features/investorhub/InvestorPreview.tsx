@@ -1,7 +1,6 @@
 // Card class for pull-quote
 const quoteCardClass = "bg-white rounded-xl p-6 shadow-sm";
 // Evolution Gold color token
-const GOLD = "#d4a964";
 
 // Social/action icons (SVGs for demo)
 const HouseIcon = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
@@ -119,9 +118,13 @@ export function InvestorPreview({ doc, media, logo }: InvestorPreviewProps) {
             </div>
           )}
           {media && (
-            <div className="mt-0 md:self-start">
-              <div className="aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-xl bg-neutral-900">
-                <img src={media.src} alt={media.alt || "Media"} className="w-full h-full object-cover" />
+            <div className="mt-10 md:mt-0 md:self-start">
+              <div className="w-full max-w-xs md:max-w-sm lg:max-w-md aspect-[9/16] overflow-hidden rounded-xl bg-neutral-900">
+                <img
+                  src={media.src}
+                  alt={media.alt ?? doc.horse_name}
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
           )}
@@ -140,15 +143,16 @@ export function InvestorPreview({ doc, media, logo }: InvestorPreviewProps) {
         <div className="w-full rounded-xl bg-neutral-950 px-6 py-5 flex items-center justify-between mt-12">
           {/* Left: Evolution mark + label */}
           <div className="flex items-center gap-2">
-            <HouseIcon className="h-5 w-5" style={{ color: GOLD }} />
+            <HouseIcon className="h-5 w-5 text-ownership-gold" />
             <span className="text-xs font-medium tracking-[0.18em] uppercase text-neutral-500">Evolution Stables</span>
           </div>
           {/* Right: social/action icons */}
           <div className="flex items-center gap-4 text-neutral-600">
-            <a href="#" aria-label="Evolution Platform" className="hover:text-ownership-gold" style={{ color: GOLD }}><HouseIcon className="h-5 w-5" /></a>
-            <a href="#" aria-label="Open X" className="hover:text-ownership-gold"><XIcon className="h-5 w-5" /></a>
-            <a href="#" aria-label="Open Instagram" className="hover:text-ownership-gold"><InstagramIcon className="h-5 w-5" /></a>
-            <a href="#" aria-label="Email Evolution Stables" className="hover:text-ownership-gold"><MailIcon className="h-5 w-5" /></a>
+            <button className="text-ownership-gold hover:text-ownership-gold" aria-label="Evolution Stables"><HouseIcon className="h-5 w-5" /></button>
+            <button className="hover:text-ownership-gold" aria-label="X"><XIcon className="h-5 w-5" /></button>
+            <button className="hover:text-ownership-gold" aria-label="Instagram"><InstagramIcon className="h-5 w-5" /></button>
+            <button className="hover:text-ownership-gold" aria-label="LinkedIn"><svg className="h-5 w-5" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2" y="2" width="16" height="16" rx="3" stroke="currentColor" strokeWidth="1.5"/><path d="M6.5 8.5v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><circle cx="6.5" cy="6.5" r="1" fill="currentColor"/><path d="M9.5 10.5c0-1 1-2 2.5-2s2.5 1 2.5 2v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg></button>
+            <button className="hover:text-ownership-gold" aria-label="Email"><MailIcon className="h-5 w-5" /></button>
           </div>
         </div>
       )}
