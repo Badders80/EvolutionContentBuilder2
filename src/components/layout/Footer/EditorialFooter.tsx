@@ -1,7 +1,7 @@
 
 import clsx from "clsx";
 import { useAppContext } from "../../../context/AppContext";
-import { footerPadding } from "../../../layout/layoutConfig";
+import { getFooterClasses } from "../../../layout/layoutConfig";
 
 const EvolutionLogo = () => (
   <svg
@@ -22,7 +22,7 @@ export function EditorialFooter() {
     <footer
       className={clsx(
         "mt-10 rounded-md bg-es-text",
-        footerPadding(layoutConfig.footerEmphasis)
+        getFooterClasses(layoutConfig)
       )}
     >
       <div className="flex w-full items-end justify-between gap-4 text-es-textSoft/80 text-xs md:text-sm">

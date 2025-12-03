@@ -1,12 +1,16 @@
+
 import { SmartImage } from '../SmartImage';
 import { RawHtmlEmbed } from '../RawHtmlEmbed';
-import { useAppContext } from '../../context/AppContext';
 import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
+import type { StructuredFields } from '../../types';
 
-export function VisualTemplate() {
-  const { structured: content, settings } = useAppContext();
+interface VisualTemplateProps {
+  structured: StructuredFields;
+  settings: { includeQuote: boolean; includeImage: boolean; devicePreview: string };
+}
 
+export function VisualTemplate({ structured: content, settings }: VisualTemplateProps) {
   const isMobile = settings.devicePreview === 'mobile';
   const gridClass = isMobile
     ? 'grid grid-cols-1 gap-6'

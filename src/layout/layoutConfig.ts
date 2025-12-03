@@ -1,3 +1,38 @@
+export function getRightColumnClasses(): string {
+  // right column: flex, gap, responsive spacing
+  return "flex flex-col gap-6";
+}
+
+export function getPullQuoteClasses(): string {
+  // pull-quote: centered, tight, responsive
+  return "cursor-pointer text-center";
+}
+/** Tokenised Tailwind helpers for layout areas */
+export function getFooterClasses(config: LayoutConfig): string {
+  // width: locked token
+  const width = "w-full"; // or "w-full max-w-4xl mx-auto"
+  // height: driven by footerEmphasis
+  const padding =
+    config.footerEmphasis === "standard"
+      ? "px-5 py-36"
+      : "px-4 py-27";
+  return `${width} ${padding}`;
+}
+
+export function getHeaderClasses(config: LayoutConfig): string {
+  // width: locked token
+  const width = "w-full";
+  // padding: driven by headerStyle
+  let padding = "px-5 py-4";
+  if (config.headerStyle === "compact") padding = "px-4 py-3";
+  if (config.headerStyle === "hero") padding = "px-6 py-6";
+  return `${width} ${padding}`;
+}
+
+export function getBodyColumnClasses(): string {
+  // width: locked token
+  return "editorial-body cursor-pointer space-y-4 text-sm leading-relaxed md:text-base";
+}
 // src/layout/layoutConfig.ts
 
 import type { StructuredFields } from "../types";

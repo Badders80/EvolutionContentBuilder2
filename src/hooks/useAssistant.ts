@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SYSTEM_PROMPT } from "../utils/systemPrompt";
 import { LAYOUT_PROMPT } from "../utils/layoutPrompt";
 import { EVOLUTION_BRAND_VOICE } from "../prompts/brandVoice";
+import { validateAIPayload } from "../utils/validateAIPayload";
 
 const API_KEY =
   (import.meta.env.VITE_GEMINI_API_KEY as string | undefined) ??
@@ -71,7 +72,16 @@ ${rawInput}
         // Attempt to parse the stripped string
         parsed = JSON.parse(jsonString);
 
-        // Success: Merge new data while preserving existing structured content (like image URLs)
+
+        // Validate AI payload before updating context
+        if (!validateAIPayload(parsed)) {
+          appendMessage({
+            role: "assistant",
+            content: `Error: AI response contained forbidden fields (CSS/Tailwind/HTML). Please rephrase your request. Raw: ${JSON.stringify(parsed)}`,
+          });
+          return false;
+        }
+
         updateStructuredFields({
           headline: parsed?.headline ?? "",
           subheadline: parsed?.subheadline ?? "",

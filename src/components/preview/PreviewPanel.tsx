@@ -3,7 +3,6 @@ import { Monitor, Tablet, Smartphone, FileJson, FileType, Printer } from "lucide
 import { useAppContext } from "../../context/AppContext";
 import { determineTemplate } from "../../utils/layoutRules";
 import { VisualTemplate } from "../Templates/VisualTemplate";
-// CHANGE: Import the Output component (The Single Source of Truth)
 import { EditorialOutput } from "../Templates/EditorialOutput";
 import { LongformTemplate } from "../Templates/LongformTemplate";
 import { exportToPDF, exportToHTMLFull } from "../../utils";
@@ -73,17 +72,16 @@ export const PreviewPanel: React.FC = () => {
   };
 
   const renderTemplate = () => {
+    const templateProps = { structured, layoutConfig, settings };
     switch (resolvedLayout) {
       case 'visual':
-        return <VisualTemplate />;
+        return <VisualTemplate {...templateProps} />;
       case 'editorial':
-        // CHANGE: Render EditorialOutput. 
-        // Now the preview is 100% identical to the PDF and includes click-to-edit.
-        return <EditorialOutput />;
+        return <EditorialOutput {...templateProps} />;
       case 'longform':
-        return <LongformTemplate />;
+        return <LongformTemplate {...templateProps} />;
       default:
-        return <EditorialOutput />;
+        return <EditorialOutput {...templateProps} />;
     }
   };
 

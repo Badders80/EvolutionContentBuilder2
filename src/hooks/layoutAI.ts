@@ -1,4 +1,6 @@
 import type { StructuredFields, AppSettings } from "../types";
+
+// import { validateAIPayload } from "../utils/validateAIPayload";
 import type { LayoutConfig } from "../layout/layoutConfig";
 
 export function runLayoutTweaks(
@@ -8,6 +10,8 @@ export function runLayoutTweaks(
   // TODO: Replace stub with Gemini call that returns a valid LayoutConfig JSON.
   // For now, this is a no-op that just echoes the current config.
   if (!request.trim()) return Promise.resolve(current);
+  // In future: validate AI payload before returning
+  // Example: if (!validateAIPayload(result)) throw new Error('Forbidden fields');
   return Promise.resolve(current);
 }
 
@@ -25,6 +29,8 @@ export function runOptimise(
   void config;
   void settings;
 
+  // In future: validate AI payload before returning
+  // Example: if (!validateAIPayload(result)) throw new Error('Forbidden fields');
   return Promise.resolve({
     contentSuggestions: {},
     layoutSuggestions: {},

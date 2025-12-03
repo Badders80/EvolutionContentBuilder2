@@ -1,16 +1,22 @@
+
 import { EditorialHeader } from "../layout/Header";
 import { EditorialFooter } from "../layout/Footer";
 import { SmartImage } from "../SmartImage";
 import { ExternalEmbedCard } from "../ExternalEmbedCard";
-import { useAppContext } from "../../context/AppContext";
+import { getBodyColumnClasses } from "../../layout/layoutConfig";
+import { getRightColumnClasses, getPullQuoteClasses } from "../../layout/layoutConfig";
+import type { StructuredFields } from "../../types";
 
-export function EditorialOutput() {
-  const { structured: content, settings, setTargetField } = useAppContext();
+interface EditorialOutputProps {
+  structured: StructuredFields;
+  settings: { includeQuote: boolean; includeImage: boolean };
+}
 
-  const paragraphs = (content.body ?? "")
-    .split(/\n{2,}/)
-    .map((p) => p.trim())
-    .filter(Boolean);
+export function EditorialOutput({ structured: content, settings }: EditorialOutputProps) {
+  // setTargetField is not available here; click-to-edit is not supported in props-only mode
+  const paragraphs = content.body
+    ? content.body.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean)
+    : [];
 
   return (
     <div className="bg-es-bg text-es-text">
@@ -19,10 +25,7 @@ export function EditorialOutput() {
 
         <div className="grid gap-10 md:grid-cols-2">
           {/* Left column: body */}
-          <div
-            className="editorial-body cursor-pointer space-y-4 text-sm leading-relaxed md:text-base"
-            onClick={() => setTargetField("body")}
-          >
+          <div className={getBodyColumnClasses()}>
             {paragraphs.length > 0 ? (
               paragraphs.map((para, idx) => <p key={idx}>{para}</p>)
             ) : (
@@ -33,13 +36,10 @@ export function EditorialOutput() {
           </div>
 
           {/* Right column: quote + media */}
-          <div className="flex flex-col gap-6">
+          <div className={getRightColumnClasses()}>
             {/* Quote */}
             {settings.includeQuote && content.quote && (
-              <div
-                className="cursor-pointer text-center"
-                onClick={() => setTargetField("quote")}
-              >
+              <div className={getPullQuoteClasses()}>
                 <p className="font-serif italic text-xl md:text-2xl leading-snug text-es-text">
                   <span className="align-top text-3xl md:text-4xl text-es-text">“</span>
                   <span className="ml-1">{content.quote}</span>
@@ -62,10 +62,10 @@ export function EditorialOutput() {
                   <div className="mx-auto w-full max-w-lg md:max-w-xl">
                     {content.imagePreview || content.featuredImageUrl ? (
                       <SmartImage
-                        src={content.imagePreview || content.featuredImageUrl}
-                        alt={content.caption ?? content.headline ?? ""}
-                        className="w-full rounded-lg object-cover"
-                      />
+                          src={content.imagePreview || content.featuredImageUrl}
+                          alt={content.caption || content.headline || ""}
+                          className="w-full rounded-lg object-cover"
+                        />
                     ) : null}
 
                     {content.videoUrl &&

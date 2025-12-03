@@ -1,12 +1,15 @@
 import { SmartImage } from '../SmartImage';
 import { RawHtmlEmbed } from '../RawHtmlEmbed';
-import { useAppContext } from '../../context/AppContext';
 import { EditorialHeader } from '../layout/Header';
 import { EditorialFooter } from '../layout/Footer';
+import type { StructuredFields } from '../../types';
 
-export function LongformTemplate() {
-  const { structured: content, settings } = useAppContext();
+interface LongformTemplateProps {
+  structured: StructuredFields;
+  settings: { includeQuote: boolean; includeImage: boolean; devicePreview: string };
+}
 
+export function LongformTemplate({ structured: content, settings }: LongformTemplateProps) {
   const isMobile = settings.devicePreview === 'mobile';
   const gridClass = isMobile
     ? 'grid grid-cols-1 gap-6'

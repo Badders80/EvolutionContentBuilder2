@@ -1,7 +1,7 @@
 
 import clsx from "clsx";
 import { useAppContext } from "../../../context/AppContext";
-import { headerPadding } from "../../../layout/layoutConfig";
+import { getHeaderClasses } from "../../../layout/layoutConfig";
 
 const modeLabels: Record<string, string> = {
   "pre-race": "PRE-RACE UPDATE",
@@ -19,7 +19,7 @@ export function EditorialHeader() {
     <header
       className={clsx(
         "mb-6 rounded-md bg-es-text text-es-bg",
-        headerPadding(layoutConfig.headerStyle)
+        getHeaderClasses(layoutConfig)
       )}
     >
       <div className="flex items-start justify-between gap-6">
