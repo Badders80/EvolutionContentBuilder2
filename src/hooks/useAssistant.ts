@@ -13,7 +13,14 @@ const API_KEY =
 const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
 
 export function useAssistant() {
-  const { appendMessage, updateStructuredFields, currentModel } = useAppContext();
+  const { 
+    appendMessage, 
+    updateStructuredFields, 
+    currentModel, 
+    targetField, 
+    setTargetField,
+    structured, 
+  } = useAppContext();
   const [loading, setLoading] = useState(false);
 
   const runCommand = async (rawInput: string) => {
@@ -36,10 +43,34 @@ export function useAssistant() {
         content: rawInput,
       });
 
+      // --- NEW LOGIC: DYNAMIC PROMPT INJECTION AND CONTEXT ---
+      const instructionBlock = targetField !== "auto" 
+        ? `
+### TARGETED REWRITE:
+You are currently in rewrite mode for ONLY the '${targetField}' field. Your JSON output MUST ONLY contain the '${targetField}' field and its new value, e.g., { "${targetField}": "new content" }. DO NOT output any other fields or conversation.` 
+        : "";
+
+      const currentContent = JSON.stringify({
+          headline: structured.headline,
+          subheadline: structured.subheadline,
+          body: structured.body,
+          quote: structured.quote,
+          quoteAttribution: structured.quoteAttribution,
+          footer: structured.footer,
+      }, null, 2);
+
       const prompt = `
 ${SYSTEM_PROMPT}
 
 ${EVOLUTION_BRAND_VOICE}
+
+### CURRENT CONTENT STATE:
+The following JSON object represents the current content you are editing. Use this as context for your response:
+---
+${currentContent}
+---
+
+${instructionBlock}
 
 ### USER INPUT:
 ${rawInput}
@@ -72,7 +103,6 @@ ${rawInput}
         // Attempt to parse the stripped string
         parsed = JSON.parse(jsonString) as Partial<StructuredFields>;
 
-
         // Validate AI payload before updating context
         if (!validateAIPayload(parsed)) {
           appendMessage({
@@ -81,21 +111,36 @@ ${rawInput}
           });
           return false;
         }
+        // Reset target field immediately after successful parsing
+        if (targetField !== "auto") {
+            setTargetField("auto"); 
+        }
 
-        updateStructuredFields({
-          headline: parsed?.headline ?? "",
-          subheadline: parsed?.subheadline ?? "",
-          body: parsed?.body ?? "",
-          quote: parsed?.quote ?? "",
-          quoteAttribution: (parsed as any)?.attribution ?? parsed?.quoteAttribution ?? "",
-          footer: parsed?.footer ?? "",
-        });
+        // --- ROBUST FIELD FILTERING (Only update explicitly returned fields) ---
+        const fieldsToUpdate: Partial<StructuredFields> = {};
+
+        // Only include fields that are explicitly defined in the AI's payload
+        if (parsed?.headline !== undefined) fieldsToUpdate.headline = parsed.headline;
+        if (parsed?.subheadline !== undefined) fieldsToUpdate.subheadline = parsed.subheadline;
+        if (parsed?.body !== undefined) fieldsToUpdate.body = parsed.body;
+        if (parsed?.quote !== undefined) fieldsToUpdate.quote = parsed.quote;
+        // Handle attribution, preferring the more descriptive key if available
+        if (parsed?.quoteAttribution !== undefined) fieldsToUpdate.quoteAttribution = parsed.quoteAttribution;
+        else if ((parsed as any)?.attribution !== undefined) fieldsToUpdate.quoteAttribution = (parsed as any).attribution;
+        if (parsed?.footer !== undefined) fieldsToUpdate.footer = parsed.footer;
+
+        // If no fields were returned, we have a problem
+        if (Object.keys(fieldsToUpdate).length === 0 && rawInput.toLowerCase() !== "ping") {
+          throw new Error("AI did not return a valid content object.");
+        }
+
+        updateStructuredFields(fieldsToUpdate);
 
         // Send raw response to log (optional, but helpful for debugging)
         appendMessage({ role: "assistant", content: textRaw });
 
       } catch (e) {
-        console.warn("JSON Parse Failed, AI sent conversational filler.", e);
+        console.warn("JSON Parse Failed or Invalid payload returned:", e);
 
         // **Failure:** Trigger failure toast and send original raw text to log
         // Note: The logic for setting the UI toast is handled in the Composer component.
@@ -103,7 +148,6 @@ ${rawInput}
           role: "assistant",
           content: `Error: Content could not be structured. Please ask Gemini to regenerate. Raw text received: ${textRaw}`,
         });
-
         // Return false to signal to the Composer that the command failed its quality check
         return false;
       }

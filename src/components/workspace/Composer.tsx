@@ -7,9 +7,18 @@ export const Composer: React.FC = () => {
   const [input, setInput] = useState("");
   const [toast, setToast] = useState<string | null>(null);
   const { runCommand, loading } = useAssistant();
-  const { currentModel, setCurrentModel } = useAppContext();
+  const { currentModel, setCurrentModel, targetField } = useAppContext(); 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // New: Render function for the target indicator
+  const renderTargetIndicator = () => {
+      if (targetField === 'auto') return null;
+      return (
+        <span className="absolute top-2 right-2 text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-900 text-white">
+          Target: {targetField}
+        </span>
+      );
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -42,7 +51,8 @@ export const Composer: React.FC = () => {
   return (
     <div className="border-t border-es-border bg-white p-4">
       <div className="relative flex flex-col gap-2 rounded-xl border border-es-border shadow-sm focus-within:ring-2 focus-within:ring-slate-200 transition-all bg-white overflow-hidden">
-        
+        {/* Target Indicator */}
+        {renderTargetIndicator()}
         {/* Text Area */}
         <textarea
           value={input}
@@ -55,7 +65,6 @@ export const Composer: React.FC = () => {
 
         {/* Toolbar */}
         <div className="flex items-center justify-between bg-slate-50 px-3 py-2 border-t border-es-border">
-          
           {/* Left: Tools */}
           <div className="flex items-center gap-2">
             <button 
@@ -66,7 +75,6 @@ export const Composer: React.FC = () => {
               <Paperclip size={18} />
               <input type="file" ref={fileInputRef} className="hidden" />
             </button>
-            
             {/* Model Selector */}
             <div className="flex items-center gap-1 px-2 py-1 bg-white border border-es-border rounded-md text-xs text-slate-600">
               <Bot size={14} className="text-emerald-600" />
@@ -81,7 +89,6 @@ export const Composer: React.FC = () => {
               </select>
             </div>
           </div>
-
           {/* Right: Send */}
           <button
             onClick={() => handleSubmit()}
